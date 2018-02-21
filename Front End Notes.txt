@@ -1,0 +1,4 @@
+让页面占据全屏：html{height:100%；}
+背景基础设置:background-size:cover； background-position:center；
+欢迎界面的大字设置位置:为body加padding
+给hr加border-top:1px solid #f8f8f8; border-bottom:1px solid rgba(0,0,0,0.2);来加个阴影

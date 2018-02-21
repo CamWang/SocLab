@@ -1,0 +1,4 @@
+alert()                     发出警告
+promote()                   发出提问
+clear()                     清除控制台
+console.log()               在控制台打印文字

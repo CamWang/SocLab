@@ -1,0 +1,91 @@
+
+#General Rule全体规则#
+  selector{
+      property : value;
+      anotherProperty : value;
+  }
+
+
+#Connect CSS with HTML链接CSS与HTML#
+
+  <head>
+    <link rel="stylesheet" type="text/css" herf="css.css">
+  </head>
+
+
+#Selector选择器#
+
+  *          选择所有元素
+  element    选择此类元素
+  #          选择某id的元素
+  ele#ele    选择某元素下某id的元素
+  .          选择某class元素
+  ele,ele    选择这两个元素
+  ele ele    选择在某元素1包裹的所有某元素2(也可以放在HTML代码里来应用两个CSS的class或者id)
+  ele > ele  选择某元素1包裹的内容里最外层的元素2
+  ele + ele  选择某元素1包裹内容里最外层的元素2
+  ele ~ ele  选择某元素1包裹内容里所有元素2
+  #elements元素的更精确形式（可以用下面任何一个element替代上面的）
+  ele[attr]  选择具有某属性[attribute]的某元素
+    element[attribute="blablabla"]   可以更精确限定属性的范围
+    element[attribute*="blablabla"]  加*后，选择属性的赋值内某处有blablabla
+    element[attribute^="blablabla"]  加^后，选择属性赋值开头为blablabla的东西 ep.给链接a[herf^="http"]加点啥
+    element[attribute$="blablabla"]  加$后，选择属性赋值末尾为blablabla的东西 ep.给链接a[herf$=".jpg"]加个图片标志
+    element[data-filetype="blabla"]  选择已赋予data-filetype属性为blabla的东西
+    element[data-info~="blabla"]     选择给元素加data-info属性的用空格分开的值中有blabla的元素
+  Pseudo伪类&伪元素
+    ele:hover  选择鼠标悬停在某元素时的样式 [IMPORTANT] (a:hover必须在a:link和a:visited之后)
+    ele:focus  选择拥有键盘输入焦点的元素
+    a:link     选择作为连接的a
+    a:visited  选择访问过的a链接
+    a:active   选择选定的链接(必须在link visited hover之后)
+    p::first-line p::first letter  选择所有p元素的第一行/第一个字母
+  Nth选择第几个元素
+    ele:nth-child(number)      选择作为第number个子元素某元素
+    ele:nth-of-type(number)    选择作为第number个特定子元素
+    ele:first-child            选择作为第一个子元素
+    ele:last-child             选择作为最后一个子元素
+
+
+#Inherite System继承系统#
+
+id>class>给子元素赋的属性>给母元素赋的属性
+
+
+#Format文字格式#
+
+text-transform:uppercase;   改变大小写
+letter-spacing:10px;        改变字间距
+text-shadow:1px 1px 1px rgba(0,0,0,0.2);  给字加阴影，可用,分隔来添加多个阴影。
+
+
+#Color System颜色系统#
+
+  color:#ff0000;              [hexadecimal]十六进制
+  color:rgb(0,111,0);         RGBcolor
+  color:rgba(255,255,255,.2)   a指的是alpha channel调整透明度，0~1
+
+
+#Background设置背景#
+
+  background:url(afljldajsdfj.jpg);
+  background-repeat:no-repeat;       (给某个元素设置背景图片的时候不要忘了)
+  background-size:cover;
+
+
+#Box Model&Posioning规定元素大小#
+  Padding内边框
+  Border边框
+  Margin外边框(设置为auto会自动居中，注意直接设置margin会带着四周)[ep. margin:0 auto 0 auto]
+  (设置max-width[以像素形式]与width[以百分比形式]可以做出响应式设计，小于max width时会取百分比形式的width)
+
+
+#Bootstrap#
+  junbotron    可以用来在页面最开始展示大面积的少量的文字，类似于“欢迎界面”啥的。
+
+  jQuery       在使用JavaScript之前需要引用jQuery，JS和jQuery文件最好放在页面之后“</body>之前提升页面载入速度”
+
+  collapse     是用来控制navbar响应式设计里移动端的暂时隐藏，用于配合hamburger menu。包含在button里的多个span元素，并且需要有data-target的id指向。
+  layout       mobile[extra small xs] tablet[small s] labtop[medium m] desktop[large l]
+    就是给元素加上col-xs/sm/md/lg-在某个状态下占据12的多少份
+  在head里title上方加<meta name="viewport" content="width=device-width, initial-scale=1">来实现bootstrap的响应式设计

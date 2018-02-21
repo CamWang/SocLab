@@ -1,0 +1,137 @@
+#基础笔记
+
+  //在声明数组时，声明数组内有两个元素则声明ep. a[2]={3,5}但调用时a[0]=3,a[1]=5，需要多声明一个数组位。
+
+
+
+#常用函数
+
+  已知一个数求其平方根：r=sqrt(100);
+  已知底数x,幂指数y，求x的y次方：k=pow(x,y);
+  求一个字符串的长度：i=strlen(str1);
+  比较两个字符串的大小:v=strcmp(str1,str2);
+  把字符串转化为相应的整数：n=atoi(str1);
+
+
+#函数的定义
+
+  EP.               ↙[形式参数]
+  float max(float a,float b)    //函数输出变量类型  函数名(输入参数类型[可多个定义])
+  {
+      if(a > b)                 //函数执行的语句
+          return a;             //可以用(-a)来取个负数啥的
+      else
+          return b;
+  }
+  //写完函数体后，就可以在下方的main函数中调用absolute函数了
+    int main()
+    {
+        int m = 3,n = 4;
+        result = max(a , b);      //在此处调用的刚刚定义的函数
+        cout << result;    ↖[实际参数]
+        return 0;
+    }
+  //无初始值的函数也是可以的
+    int get_int()
+    {
+        int n=0;
+        cout<<"输入点啥："<<endl;
+        cin>>n;
+        return n;
+    }
+  //无返回值也是可以的
+    void delay(int n)             //void空返回值
+    {
+        for(int i=0;i<n*100000;i++);
+        return;
+    }
+  //同时都无也可以
+    void display()
+    {
+        cout<<"不要随便乱输东西 : ("<<endl;
+    }
+  
+  //函数可以作为独立语句[cout<<max(m,n)]、作为表达式的一部分[n=max(m,n)]、其他函数的调用里[n=min(max(a,b),7)]
+  
+  //C++同样允许外部文件，可以把函数写在另一个文件里，同目录主文件里写include "filename.h"调用
+     <>会优先寻找系统函数库 ep.<iostream> 而""会优先寻找当前目录下的函数
+  
+  //函数的类型即函数返回值的数据类型
+
+  //可以把自定函数定义在main函数后，但要在main函数前定义一下
+    EP.
+    float max(float,float);    //此处称为函数原型  返回值类型+函数名+参数类型[参数不写名字]
+    int main()
+    {
+        return 0;
+    }
+    float max(float a,float b)
+    {
+        blablabla
+    }
+
+
+#函数的执行
+
+  //任何程序都是先执行main函数，在读到需要执行其他函数的时候再在内存写入其他函数。
+  //实参和形参储存空间不同，再用到形参时会复制实参值给形参，实参不展示形参在其他函数的执行过程。
+  //即使实参和形参或局部变量和全局变量名字一样，两参数、变量互不干涉，也不影响。
+  //优先级局部变量较高
+  //注意变量声明时变量的作用范围就确定了
+    EP.
+    #include <iostream>
+    using namespace std;
+    int a=0, b=0;
+    void exchange()
+    {
+        int p;
+        if (a<b)
+        {
+           p=a;a=b;b=p;
+        }
+    }
+    int main()
+    {
+        cin>>a>>b;
+        exchange();
+        cout<<a<<" "<<b<<enl;
+        return 0;
+            
+    }
+
+    EP.2
+        #include <iostream>
+    using namespace std;
+    int a=0, b=0;
+    void exchange(int a,int b)     //声明局部变量优先考虑局部变量
+    {
+        int p;
+        if (a<b)
+        {
+           p=a;a=b;b=p;
+        }
+    }
+    int main()
+    {
+        cin>>a>>b;
+        exchange();
+        cout<<a<<" "<<b<<enl;
+        return 0;
+            
+    }
+
+    //在用数组元素ep. a[0]做参数时规则与变量做参数相同，同上。
+    //在用数组名做参数时，数组名传递的是储存数组的内存地址，所以调用外部函数会修改该数组值。
+    EP.
+    #include <iostream>
+    using namespace std;
+    void change(int a[])         //用此方法来声明数组参数，
+    {
+        a[0]=30; a[1]=50;
+    }
+    int main()
+    {
+        int a[2]={3,5};
+        change(a);               //用数组名做参数传递的是数组存放位置的内存地址，数组名非变量
+        cout << a[0] << " " << a[1] << endl;
+    }

@@ -1,0 +1,56 @@
+<p>                段落
+  <b>         粗体字
+  <big>       大号字(small小号)
+  <em>        着重字
+  <i>         斜体字
+  <strong>    着重语气
+  <sub>       下标字
+  <sup>       上标字
+  <ins>       插入字
+  <del>       删除字
+  <abbr>      定义缩写  eg. <abbr title="CamWang">CW</abbr>
+  <span>      圈定文字来定义内容
+
+<a>                链接(herf=)  eg. <a href="#tips">有用的提示</a> [此链接会跳转到id/name为tips的东西上]
+<h1>               标题
+<hr/>              水平线（无闭合标签)
+<br/>              换行
+<!-- -->           注释
+<img>              图像（无闭合标签 src=)
+
+<table>            表格
+  <thead>          表头（以便明显区分表头表体）[tr不能省略，只是多加一层]
+  <tbody>          表体
+  <tr>             行
+  <th>             表头(包在tr里，粗体居中显示)
+  <td>             单元格
+  &nbsp;           占位符(解决表格空位显示问题)
+
+<ul>               无序列表
+<ol>               有序列表
+<li>               列表内容
+
+<label>            标签(经常包住表单使用，或放置在前，用for+表单id来链接他们)
+<form>             表单[action:把数据送到哪 method:是送出还是接收(HTTP method)]表单的最后一个按钮元件会承担submit的责任
+<input>            表单[type:submit text date color file checkbox email password radio; placehplder; required]（加name项用于提交）
+  type：
+    checkbox    多选项[添加checked可以默认勾选]
+    radio       单选项(把同类项添加相同name属性)（用value来规定送出的值为多少）
+    password    密码(用ep. partten=".{3,5}来限制密码长度为3~5个字符[对于所有input类型都适用]，用title来规定输入错误后的提示内容error message)
+  attribute:
+    placeholder 背景字(占位符)
+    required    必填项
+<select>           下拉菜单（加name项用于提交）[required]
+  <option>      下拉选项（用value来规定送出的值为多少）[selected disabled(用于禁止选择此项)]
+<textarea>         输入一段文字框（中间包着默认文字）（加name项用于提交）[rows cols required]
+<button>           按钮
+
+“块级元素”译为 block level element 占一行
+“内联元素”译为 inline element      不占一行
+<div><span>
+<frameset>         框架  eg. 
+    <frameset cols="25%,75%">
+      <frame></frame>
+      <frame></frame> 
+    </frameset>
+  <frame>          内置框架

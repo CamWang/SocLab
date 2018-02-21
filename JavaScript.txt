@@ -1,0 +1,32 @@
+#Notes
+    //Methods
+        clear()
+        console.log()    [直接在console里打印括号内的东西]
+        alert()          [弹出带括号内文字的警告窗口]
+        prompt()         [弹出带括号内问题以及一个输入框的窗口]
+            [可通过var userName = prompt("What's your name?")来让用户为userName赋值]
+    
+    //Operators
+        ==                [equal to]
+        !=                [not equal to]                    
+        ===               [equal value and type]            x === "5"   false
+        !==               [not equal value or equal type]   x !== "5"   true
+        ##special:  true == "1" [true]     null == undefined  [true]    NaN == NaN    [false]
+
+    //String  <PJWD 3rd>-page 33
+        \n 换行    \t制表    \b 退格    \r 回车    \f 进纸    \uNNNN 以"NNNN"为Unicode十六进制码的Unicode字符
+
+    
+#Examples&Answers
+
+    //1.
+    ( "blah" + "blah" )[6]                   --a    [字符位数从0开始，但长度依然是真实字符数]
+
+    //2.
+    "hello".length % "hi\\" .length          --2    [\为反义符]
+
+    //4.
+    var str = "hello";
+    for (var i = 0; i < str.length; i++){
+        console.log(str{i});
+    }
