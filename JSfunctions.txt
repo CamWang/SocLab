@@ -1,4 +1,44 @@
+//函数可以输入数字、变量、字符串、数组、方程名等各种object
+//function和function(){}效力与变量常量相同，但function()会invoke调用该函数
+
 alert()                     发出警告
-promote()                   发出提问
+prompt()                    发出提问
 clear()                     清除控制台
 console.log()               在控制台打印文字
+setInterval(functionName, Interval)   设置函数执行间隔并连续执行函数 [iinterval单位是ms]
+    [可以将FunctionName换成function(){statements}来直接定义一个会重复执行的函数]
+clearInterval(number)       来停止某function
+
+
+//Operators
+        ==                [equal to]
+        !=                [not equal to]                    
+        ===               [equal value and type]            x === "5"   false
+        !==               [not equal value or equal type]   x !== "5"   true
+        ##special:  true == "1" [true]     null == undefined  [true]    NaN == NaN    [false]
+
+
+//Array Methods
+    添加元素到数组末尾：Array.push(element);         //会返回数组长度
+    添加元素到数组头部：Array.unshift(element);
+    删除数组末尾的元素：Array.pop();
+    删除数组头部的元素：Array.shift();
+    删除数组某个特定index的元素：Array.splice(index,howMany);
+    查找数组某元素的inedx（索引）：Array.indexOf(element);
+    遍历全部数组元素：Array.forEach()          //forEach() 方法对数组的每个元素执行一次提供的函数，可用for loop替换
+        //forEach方法在每次输出时实际上会给()内函数三个arguments，按顺序分别是：元素element，元素号index,数组名array
+
+
+//Object aka.对象     [自包含的数据集合]   
+
+    //访问对象里的数据有几种形式，property属性       method方法
+    EP.                        object.property    object.method()
+    EP.                        object["property"] 
+        属性是隶属于某个特定对象的变量(避免使用数字做开头)
+        方法是隶属于某个特定对象的函数
+
+        调用对象内数组的方法object.array[index]，每一层都用.来访问内部
+    
+    //声明对象方式
+    EP.  var person = {name:"camwang", age:21, city:"LA"};
+        //对象里也可以包含对象

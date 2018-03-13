@@ -1,22 +1,18 @@
 #Notes
-    //Methods
         clear()
         console.log()    [直接在console里打印括号内的东西]
         alert()          [弹出带括号内文字的警告窗口]
         prompt()         [弹出带括号内问题以及一个输入框的窗口]
             [可通过var userName = prompt("What's your name?")来让用户为userName赋值]
     
-    //Operators
-        ==                [equal to]
-        !=                [not equal to]                    
-        ===               [equal value and type]            x === "5"   false
-        !==               [not equal value or equal type]   x !== "5"   true
-        ##special:  true == "1" [true]     null == undefined  [true]    NaN == NaN    [false]
+    
 
     //String  <PJWD 3rd>-page 33
         \n 换行    \t制表    \b 退格    \r 回车    \f 进纸    \uNNNN 以"NNNN"为Unicode十六进制码的Unicode字符
-
+    //Functions
+        函数名function仅是指代函数，而function()则为调用函数
     
+
 #Examples&Answers
 
     //1.
@@ -30,3 +26,28 @@
     for (var i = 0; i < str.length; i++){
         console.log(str{i});
     }
+
+#DOM
+
+    document 括号内内容记得加""
+        document.getElementById()         //Select object by ID
+        document.getElementsByClassName() //Select object by Class Name
+        document.getElementByTagName()    //Select object by Tag Name
+        document.querySelector()          //只选第一个对应元素，可选择以上三者，Tag可以直接输以CSS的样式选择东西id要用#id class要用.class等 选择元素内元素也可以用CSS表达
+        document.querySelectorAll()       //选择所有满足条件的元素
+        document.element                  //直接选择网页中的某一类element
+
+        element.class.add()               //为元素添加一个class标签
+        element.class.remove()            //把某元素中的class标签删除
+        element.class.toggle()            //如元素已有一个标签则删除，如果没有标签则添加该标签。】
+        
+        element.textContent               //该方法会调用该元素内所有文字可进行赋值更改，会抹掉某元素内的其他标签
+        element.innerHTML                 //该方法会返回在这个元素里所有html代码
+        
+        element.getAttribute(attributeName)  //获取某个元素的某属性（多个元素无效）
+        element.setAttribute(attributeName,attribute)
+
+        element.style.styleName=""         //设定某个元素的CSS style值
+        
+        element.addEventListener(event,function)  //当发生某event时需要执行什么函数。function可以是function name
+        //在此语句中使用this代表发生event事件的element不需要再次写element
