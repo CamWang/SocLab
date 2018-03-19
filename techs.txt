@@ -1,1 +1,3 @@
 在HTML中使用span来将一段文字中的某块文字独立，并用JS独立更新这一段文字
+
+使用style.backgroundColor而不是style.background来提高对Firefox的兼容性

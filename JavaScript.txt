@@ -27,6 +27,9 @@
         console.log(str{i});
     }
 
+    //当将多个元素选中赋予一个变量时，那个变量将自动变成数组变量，如果想要加eventlistener只能用for loop遍历一遍。
+      用this来代指eventListener里被triggered on的元素。
+
 #DOM
 
     document 括号内内容记得加""

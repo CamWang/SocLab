@@ -112,3 +112,20 @@ var posts = [
         comments:["smart ass","nonesense"]
     }
 ]
+
+//Add event listener
+var paragraph = document.querySelector("p");
+
+paragraph.addEventListener("click",changeColor)
+
+function changeColor(){
+    paragraph.style.color="#6A1B9A";
+    paragraph.textContent="You Clicked"
+}
+
+paragraph.addEventListener("mouseover",changeSize)
+
+function changeSize(){
+    paragraph.style.fontSize="50px";
+    paragraph.textContent="You Hovered"
+}
