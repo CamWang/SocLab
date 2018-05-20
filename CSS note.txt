@@ -39,9 +39,9 @@
     a:link     选择作为连接的a
     a:visited  选择访问过的a链接
     a:active   选择选定的链接(必须在link visited hover之后)
-    p::first-line p::first letter  选择所有p元素的第一行/第一个字母
+    p::first-line p::first-letter  选择所有p元素的第一行/第一个字母
   Nth选择第几个元素
-    ele:nth-child(number)      选择作为第number个子元素某元素
+    ele:nth-child(number)      选择作为第number个子元素某元素(nth代表number的序数词)
     ele:nth-of-type(number)    选择作为第number个特定子元素
     ele:first-child            选择作为第一个子元素
     ele:last-child             选择作为最后一个子元素
@@ -49,14 +49,14 @@
 
 #Inherite System继承系统#
 
-id>class>给子元素赋的属性>给母元素赋的属性
+  id>class>给子元素赋的属性>给母元素赋的属性
 
 
 #Format文字格式#
 
-text-transform:uppercase;   改变大小写
-letter-spacing:10px;        改变字间距
-text-shadow:1px 1px 1px rgba(0,0,0,0.2);  给字加阴影，可用,分隔来添加多个阴影。
+  text-transform:uppercase;   改变大小写
+  letter-spacing:10px;        改变字间距
+  text-shadow:1px 1px 1px rgba(0,0,0,0.2);  给字加阴影，可用,分隔来添加多个阴影。
 
 
 #Color System颜色系统#
@@ -72,13 +72,16 @@ text-shadow:1px 1px 1px rgba(0,0,0,0.2);  给字加阴影，可用,分隔来添�
   background-repeat:no-repeat;       (给某个元素设置背景图片的时候不要忘了)
   background-size:cover;
 
-
 #Box Model&Posioning规定元素大小#
   Padding内边框
   Border边框
   Margin外边框(设置为auto会自动居中，注意直接设置margin会带着四周)[ep. margin:0 auto 0 auto]
   (设置max-width[以像素形式]与width[以百分比形式]可以做出响应式设计，小于max width时会取百分比形式的width)
-
+ 
+  *****常用CSS样式*****
+  float:left;  把东西放在一行
+  display:inline/inline-block;  把东西变为块级元素，但有因为元素换行回车键造成的缝隙。
+  
 
 #Bootstrap#
   junbotron    可以用来在页面最开始展示大面积的少量的文字，类似于“欢迎界面”啥的。
@@ -89,3 +92,39 @@ text-shadow:1px 1px 1px rgba(0,0,0,0.2);  给字加阴影，可用,分隔来添�
   layout       mobile[extra small xs] tablet[small s] labtop[medium m] desktop[large l]
     就是给元素加上col-xs/sm/md/lg-在某个状态下占据12的多少份
   在head里title上方加<meta name="viewport" content="width=device-width, initial-scale=1">来实现bootstrap的响应式设计
+
+
+#CSS3
+  边框：
+    boder-radius: xxxpx;
+    box-shadow: 阴影x轴位置px 阴影y轴位置px 阴影模糊量px 阴影颜色;
+  背景：
+    background-size: xxxpx xxxpx;
+    background-origin: content-box (padding-box/boder-box);  //背景在元素哪个部位
+    //CSS3允许两幅背景图片，url(blablabla),url(blablabla);
+  文本：
+    text-shadow:阴影x轴位置px 阴影y轴位置px 阴影模糊量px 阴影颜色;
+    word-warp:break-word;    //会将长单词拆分自动换行
+  过渡：
+    transition: attribute timespan;
+    -moz-transition: attribute timespan;	    /* Firefox 4 */
+    -webkit-transition: attribute timespan;  	/* Safari 和 Chrome */
+    -o-transition: attribute timespan;	       /* Opera */
+    //用于规定元素某属性变化时平滑过渡的时间，添加多个属性用逗号隔开，不能少-webkit-等前缀
+  动画：
+    @keyframes myfirst    @-webkit-keyframes myfirst /* Safari 和 Chrome */
+    {
+    0%   {background: red; left:0px; top:0px;}
+    25%  {background: yellow; left:200px; top:0px;}
+    50%  {background: blue; left:200px; top:200px;}
+    75%  {background: green; left:0px; top:200px;}
+    100% {background: red; left:0px; top:0px;}
+    }
+    //记得把动画与网页元素绑定。
+    div
+    {
+    animation: myfirst 5s;
+    -moz-animation: myfirst 5s;	/* Firefox */
+    -webkit-animation: myfirst 5s;	/* Safari 和 Chrome */
+    -o-animation: myfirst 5s;	/* Opera */
+    }

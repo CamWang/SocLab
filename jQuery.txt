@@ -1,0 +1,131 @@
+//Add jQuery
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+//Select things with jQuery
+//Tip:  "$" is a function. And execute it will return an Array!!
+//      The selector will loop through ALL the elements fits the requirements.
+    $("img");
+    $(".sale");
+    $("#bonus");
+    $("li a");
+
+
+//Change some css
+    $("element").css(property, value);
+//We can also use variables to pass in styles
+    var styles = {
+        color: "#333",
+        fontWeight: "bold",
+        backgroundColor: "#fff"
+    };
+    $("#button").css(styles);
+//Tips: CSS[font-size] but in JS/jQuery[fontSize]
+
+//Objectives
+
+    //css()
+        /*Change or print the CSS code of some elements.*/
+        $("element").css(property, value);
+        $("element:first-of-type").css(property, value);
+        //addClass()
+        //removeClass()
+        //toggleClass()
+            //Have that Class: Remove; Don't have that Class: Add;
+
+    //val()
+        /*The .val() method is primarily used to get the values of form elements 
+        such as input, select and textarea. When called on an empty collection,
+        it returns undefined.*/
+        $("element").val();    //Return the value of the element
+        $("select.class").value("some value")    //Change the value of select element with class class.
+
+    //text()
+        /*Get the combined text contents of each element in the set of matched
+        elements, including their descendants*/
+        //Also can be used to change the text content by $("element").text("some text")
+        $("h1").text();    //Print the text content of EVERY h1.
+        $("h1").text("Hello World");    //Change the text content of EVERY h1. 
+
+    //attr()
+        /*Get the value of an attribute for the first element in the set of matched
+        elements or set one or more attributes for every matched elements.*/
+        $("element").attr("attribute","attribute content");
+        $("h1").attr("id","anID")    //Change the id attribute of the h1 to "anID"
+
+    //html()
+        /*Get the HTML contents of the first element in the set of matched elements or
+        set he HTML contents of EVERY matched element.*/
+        $("ul").html()    //Return the HTML code inside EVERY ul.
+        $("ul").html("HTML code")    //Change the HTML code inside EVERY ul.
+
+//EVENTS
+    
+    //Like the event listener, jQuery has some objectives bind events handler to an element
+    //Click()
+        $('#submit').click(function(){
+            console.log("alert!");
+        })
+        //change some css sheet by codes down below
+        $('#submit').click(function(){
+            $(this).css("background","pink");    //$(this) is a jQuery version of this
+        })
+    //Keydown()
+        //Bind an event handler and it will be run right the time you PRESS DOWN a button
+        //Press "Shift" + "a": events will handle them 	separately.
+
+    //Keyup()
+        //Bind an event handler and it will be run right the time you RELEASE a button
+        //Press "Shift" + "a": events will handle them 	separately.
+
+    //Keypress()
+        //Bind an event handler and it will be run between the time you press and release
+        //Press "Shift" + "a": events will handle them as a GROUP uppercase "A"
+        $("input").keypress(function(event){
+            console.log(event);
+        })
+        //This will returns an array shows what key are you pressing and many things.
+        //JUST TRY IT IN THE BROWSER!!!!
+        //Keycode is the most important to show which key are you pressing.
+        //Keycode can be looked up in http://keycode.info/.
+        $("input").keypress(function(event){
+            if(event.which === 13){
+                alert("YOU HIT ENTER KEY!");
+            }
+        })
+    
+    //On()
+        $("form submit").on("click",function(){
+            console.log("A click");
+        })
+
+        $("form submit").on("dbclick",function(){  //dbclick means double click
+            console.log("Double click");
+        })
+
+        //This event is explained by https://developer.mozilla.org/zh-CN/docs/Web/Events/dragstart
+        $('input[type="text"]').on("dragstart",function(){
+            console.log("You enter something");
+        })
+
+        $('input[type="submit"]').on("keypress",function(){
+            console.log("You enter something");
+        })
+
+        $("form").on("submit",function(){
+            console.log("You submit a form");
+        })
+
+        $("button").on("mouseenter",function(){       //mouse hover also another event "Mouseleave""
+            $("button").css("font-weight","bold");
+        })
+
+//EFFECTS!!!
+
+    //fadeOut/In()
+        //selector.fadeOut([duration]ms,[compeleteFunction])  [the function will be excuted right after the fadeOut]
+        $("spiderMan").fadeOut(400,function(){alert("The fade out is complete")})
+            //This will eventrually give the element a value of "display:none"
+            //fadeToggle() can automatically fade in or out by its statement.
+    //slideUp/Down()
+        //blablabla laziness made me want to eat

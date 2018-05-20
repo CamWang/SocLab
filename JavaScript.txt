@@ -11,6 +11,10 @@
         \n 换行    \t制表    \b 退格    \r 回车    \f 进纸    \uNNNN 以"NNNN"为Unicode十六进制码的Unicode字符
     //Functions
         函数名function仅是指代函数，而function()则为调用函数
+    //Some methods
+        Math.random() 生成随机0-1之间的数，不包括
+        Math.floor() 取整并输出整数
+        Math.floor(Math.random()*6+1)来生成随机整数
     
 
 #Examples&Answers

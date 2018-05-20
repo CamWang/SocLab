@@ -42,3 +42,9 @@ clearInterval(number)       来停止某function
     //声明对象方式
     EP.  var person = {name:"camwang", age:21, city:"LA"};
         //对象里也可以包含对象
+
+    //编写function时可以把他们都放在一个object里面来规整代码
+        var game = {};
+        game.gameon = function(){
+            *******
+        }
