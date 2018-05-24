@@ -41,7 +41,7 @@
     a:active   选择选定的链接(必须在link visited hover之后)
     p::first-line p::first-letter  选择所有p元素的第一行/第一个字母
   Nth选择第几个元素
-    ele:nth-child(number)      选择作为第number个子元素某元素(nth代表number的序数词)
+    ele:nth-child(number)      选择作为第number个子元素某元素(nth代表number的序数词) 2n 3n代表第xn个元素（常用于列表）
     ele:nth-of-type(number)    选择作为第number个特定子元素
     ele:first-child            选择作为第一个子元素
     ele:last-child             选择作为最后一个子元素
@@ -77,10 +77,11 @@
   Border边框
   Margin外边框(设置为auto会自动居中，注意直接设置margin会带着四周)[ep. margin:0 auto 0 auto]
   (设置max-width[以像素形式]与width[以百分比形式]可以做出响应式设计，小于max width时会取百分比形式的width)
- 
+
   *****常用CSS样式*****
-  float:left;  把东西放在一行
+  float:left;                   把东西放在一行
   display:inline/inline-block;  把东西变为块级元素，但有因为元素换行回车键造成的缝隙。
+  box-sizing:boder-box;         会在设置大小时包含padding和border但是不包括margin。
   
 
 #Bootstrap#
