@@ -20,7 +20,7 @@
   #          选择某id的元素
   ele#ele    选择某元素下某id的元素
   .          选择某class元素
-  ele,ele    选择这两个元素
+  ele,ele    选择这两个元素 
   ele ele    选择在某元素1包裹的所有某元素2(也可以放在HTML代码里来应用两个CSS的class或者id)
   ele > ele  选择某元素1包裹的内容里最外层的元素2
   ele + ele  选择某元素1包裹内容里最外层的元素2
@@ -34,7 +34,7 @@
     element[data-filetype="blabla"]  选择已赋予data-filetype属性为blabla的东西
     element[data-info~="blabla"]     选择给元素加data-info属性的用空格分开的值中有blabla的元素
   Pseudo伪类&伪元素
-    ele:hover  选择鼠标悬停在某元素时的样式 [IMPORTANT] (a:hover必须在a:link和a:visited之后)
+    ele:hover  选择鼠标悬停在某元素时的样式 [IMPORTANT] (a:hover必须在a:link和a:visited之后)  
     ele:focus  选择拥有键盘输入焦点的元素
     a:link     选择作为连接的a
     a:visited  选择访问过的a链接
@@ -78,11 +78,15 @@
   Margin外边框(设置为auto会自动居中，注意直接设置margin会带着四周)[ep. margin:0 auto 0 auto]
   (设置max-width[以像素形式]与width[以百分比形式]可以做出响应式设计，小于max width时会取百分比形式的width)
 
-  *****常用CSS样式*****
+
+**************************
+********常用CSS样式********
+**************************
   float:left;                   把东西放在一行
   display:inline/inline-block;  把东西变为块级元素，但有因为元素换行回车键造成的缝隙。
-  box-sizing:boder-box;         会在设置大小时包含padding和border但是不包括margin。
-  
+  box-sizing:boder-box;         会在设置大小时包含padding和border但是不包括margin,防止padding挤出元素。
+  opacity:0~1.0;                设置元素可见性
+  boder:3px solid rgba(0,0,0,0);用于去除input的隐形边框，对齐其他元素！！
 
 #Bootstrap#
   junbotron    可以用来在页面最开始展示大面积的少量的文字，类似于“欢迎界面”啥的。
@@ -99,19 +103,28 @@
   边框：
     boder-radius: xxxpx;
     box-shadow: 阴影x轴位置px 阴影y轴位置px 阴影模糊量px 阴影颜色;
+
   背景：
     background-size: xxxpx xxxpx;
     background-origin: content-box (padding-box/boder-box);  //背景在元素哪个部位
     //CSS3允许两幅背景图片，url(blablabla),url(blablabla);
+
   文本：
     text-shadow:阴影x轴位置px 阴影y轴位置px 阴影模糊量px 阴影颜色;
     word-warp:break-word;    //会将长单词拆分自动换行
+
   过渡：
     transition: attribute timespan;
     -moz-transition: attribute timespan;	    /* Firefox 4 */
     -webkit-transition: attribute timespan;  	/* Safari 和 Chrome */
     -o-transition: attribute timespan;	       /* Opera */
+    EP.
+    /* property name | duration | timing function | delay */
+    transition: margin-right 4s ease-in-out 1s;
+    //timing function: linear/ease/ease-in/ease-out/ease-in-out/steps(6, end)/cubic-bezier(.29, 1.01, 1, -0.68);
+
     //用于规定元素某属性变化时平滑过渡的时间，添加多个属性用逗号隔开，不能少-webkit-等前缀
+
   动画：
     @keyframes myfirst    @-webkit-keyframes myfirst /* Safari 和 Chrome */
     {

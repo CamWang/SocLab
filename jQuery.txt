@@ -138,7 +138,7 @@
 
 //EFFECTS!!!
 
-    //fadeOut/In()
+    //fadeOut/In/Toggle()
         //selector.fadeOut([duration]ms,[compeleteFunction])  [the function will be excuted right after the fadeOut]
         $("spiderMan").fadeOut(400,function(){alert("The fade out is complete")})
             //This will eventrually give the element a value of "display:none"
