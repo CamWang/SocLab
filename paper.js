@@ -12,6 +12,8 @@
         </body>
     </html>
 
+    //USE pt for length unit
+
 
 // To define a point
     
@@ -86,6 +88,7 @@
 
     //Use an array containing or an array
     rect.size = [200, 300];  rect.size = { x: 200, y: 400 };
+
 
 // Mathematical Operations
 
@@ -200,28 +203,33 @@
     // VISIT http://paperjs.org/tutorials/paths/working-with-path-items/ TO KNOW MORE
     // VISIT http://paperjs.org/tutorials/paths/working-with-path-items/ TO KNOW MORE
 
-    //Adding and Inserting Segments
+    // Adding and Inserting Segments
     var myPath = new Path();          //new Path() 
     myPath.strokeColor = 'black';
     myPath.add(new Point(0, 0));      //path.add(segment) 
     myPath.add(new Point(100, 50));
 
-    //Do the upper two lines
+    // Do the upper two lines
     myPath.add(new Point(0, 0), new Point(100, 50));
 
     // insert a segment between the two existing
     // segments in the path:
     myPath.insert(1, new Point(30, 40));  //path.insert(index, segment) 
 
-    //Smoothing Paths (to create a round circle)
+    // Smoothing Paths (to create a round circle)
     var path = new Path();
     path.strokeColor = 'black';
-    //Create a square
+    // Create a square
     path.add(new Point(30, 75)); 
     path.add(new Point(30, 25)); 
     path.add(new Point(80, 25));
     path.add(new Point(80, 75));
-    //Create a closed square shape
+    //Also USE
+    var path = new Path({
+        segments: [[30, 75], [30, 25], [80, 25],[80, 75]],
+        selected: true
+    });
+    // Create a closed square shape
     path.closed = true;
     // Select the path, so we can see its handles:
     path.fullySelected = true;
@@ -232,11 +240,83 @@
     // Smooth the segments of the copy:
     copy.smooth();
 
-    //Remove Segments and Paths (path.removeSegment(index))
-    //Create a circle
+    // Remove Segments and Paths (path.removeSegment(index))
+    // Create a circle
     var myCircle = new Path.Circle(new Point(100, 70), 50);
     myCircle.strokeColor = 'black';
     myCircle.selected = true;
-    //A circle has four segments and it delete the left segment
+    // A circle has four segments and it delete the left segment
     myCircle.removeSegment(0);
     
+    // *************************
+    // Circle Shaped Paths
+    new Path.Circle(centerPoint, radius);
+    // EP
+    var myCircle = new Path.Circle(new Point(100, 70), 50);
+    myCircle.fillColor = 'black';
+
+    // Rectangular Shaped Paths
+    new Path.Rectangle(rect);    // Pass in a variable that has two points to define the two conors of the rectangle
+    // EP
+    var rectangle = new Rectangle(new Point(50, 50), new Point(150, 100));
+    var path = new Path.Rectangle(rectangle);
+    path.fillColor = '#e9e9ff';
+    path.selected = true;
+
+    // Rounded Corners Rectangular Shaped Paths
+    new Path.RoundedRectangle(rect, size);    // Size decribe the size of the rounded conors;
+    // EP
+    var rectangle = new Rectangle(new Point(50, 50), new Point(150, 100));
+    var cornerSize = new Size(20, 20);
+    var path = new Path.RoundRectangle(rectangle, cornerSize);
+    path.fillColor = 'black';
+
+    // Regular Polygon Shaped Paths
+    new Path.RegularPolygon(center, numSides, radius);    // numSides defines how many sides will the polygon has
+    // EP
+    // Create a triangle shaped path 
+    var triangle = new Path.RegularPolygon(new Point(80, 70), 3, 50);
+    triangle.fillColor = '#e9e9ff';
+    triangle.selected = true;
+    // Create a decagon shaped path 
+    var decagon = new Path.RegularPolygon(new Point(200, 70), 10, 50);
+    decagon.fillColor = '#e9e9ff';
+    decagon.selected = true;
+
+    //COLOR
+    myPath.strokeColor = '#ff0000';   // set red as the stroke(border) color
+    myPath.fillColor = '#ff0000';     // set red as the inner color
+    myPath.strokeWidth = 10;          // border width
+    myPath.strokeCap = 'round';       // set a round end and start for the path that isn't close
+    myPath.strokeJoin = 'round';      // set a round conor at every turning point of a path
+    myPath.dashArray = [10, 12];      // set the path as a dashed stroke with a 10pt dash and a 12pt gap
+
+
+    //The PathStyle Object
+    secondPath.style = firstPath.style;  // Pass the style of firstPath to secondPath
+    //An example
+    var myStyle = {
+        strokeColor: '#00ffff',
+        fillColor: '#000000',
+        strokeWidth: 50
+    };
+    
+    var myCircle = new Path.Circle({
+        center: [100, 100],
+        radius: 50
+    });
+    myCircle.style = myStyle;
+
+
+// INTERACTIONS
+    
+    // My First Mouse Tool
+    
+    // Create a new path once, when the script is executed:
+    var myPath = new Path();
+    myPath.strokeColor = 'black';
+    // This function is called whenever the user clicks the mouse in the view:
+    function onMouseDown(event) {
+    	// Add a segment to the path at the position of the mouse:
+    	myPath.add(event.point);
+    }
