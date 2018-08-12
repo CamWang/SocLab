@@ -41,7 +41,7 @@
     a:active   选择选定的链接(必须在link visited hover之后)
     p::first-line p::first-letter  选择所有p元素的第一行/第一个字母
   Nth选择第几个元素
-    ele:nth-child(number)      选择作为第number个子元素某元素(nth代表number的序数词) 2n 3n代表第xn个元素（常用于列表）
+    ele:nth-child(number)      选择作为第number个子元素某元素 2n 3n代表第xn个元素（常用于列表）
     ele:nth-of-type(number)    选择作为第number个特定子元素
     ele:first-child            选择作为第一个子元素
     ele:last-child             选择作为最后一个子元素

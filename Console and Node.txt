@@ -1,0 +1,15 @@
+Console Commands
+
+ls        list
+cd        change directories
+..        up level
+touch     create a new file
+mkdir     make a new directory or folder
+rm        delete a specific file
+rm -rf    remove a entire directory
+Ctrl+C    exit
+node <filename> Run Javascript in the server side
+
+NPM
+
+var someName = require("packageName"); //To include a package into your js file
