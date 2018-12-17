@@ -129,3 +129,54 @@ function changeSize(){
     paragraph.style.fontSize="50px";
     paragraph.textContent="You Hovered"
 }
+
+
+// CallBack回调函数
+
+//FOREACH
+
+//forEach(arr, callback);
+//function callback(currentElement, currentIndex, array)
+
+var arr = [1,2,3,4,5,6];
+forEach(arr, function(number) {
+    console.log(number*2);
+});
+
+var arr = ["my", "forEach", "example"];
+var result = "";
+forEach(arr, function(str, index, array) {  //str接受元素的值，index接受元素的角标，array接受输入的对象。
+    if (array.length - 1 !== index){
+        result += str + " ";
+    } else {
+        result += str +"!!!";
+    }
+});      //result = "my forEach example!!!"
+
+//FINDIndex
+
+//findIndex(arr, callback)
+//function callback(currentElement, currentIndex, array)
+//当callback函数return为真则返回该次循环正在遍历的角标。
+
+var arr = [5,11,13,8,6,7];
+findIndex(arr, function(num, index, array) {
+    return num%2 == 0;  //一定要return，无return或return值为假则返回-1
+});
+//findeIndex will only return 3;
+//如果搜索不到就返回-1
+
+function upperCaseFirst(word) {
+    return word[0].toUpperCase() + word.slice(1);
+}
+
+function upperCaseWords(sentence) {
+    var words = sentence.split(" ");
+    for (var i=0; i < words.length; i++) {
+        words[i] = upperCaseFirst(words[i]);
+    }
+    return words.join(" ");
+}
+
+upperCaseWords("lowercase words");
+//结果："Lowercase Words"

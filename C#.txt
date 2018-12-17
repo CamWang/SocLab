@@ -1,0 +1,267 @@
+#### 常用输出
+
+    Console.WriteLine(xxx);
+    Console.Write(xxx);
+    Console.ReadKey();  // 防止执行结束瞬间退出
+
+
+#### 变量
+
+    decimal | 十进制型 | 128位小数类型 | 28-29位精度（double的两倍）
+    // 如果希望实数被识别为decimal类型在实数后加 m 或 M
+    Ep. decimal money = 500.5m;
+
+    string | 字符串型 | 引用类型
+    // C#中string类型是可被重新赋值的，但赋值操作会重新开辟新内存区域而不是重写原内存区域
+
+    数组类型
+    type[] array = new type[arrayCount];
+
+
+
+
+#### 类
+
+### 类的修饰符
+
+    internal或无                   只能在统一程序集中访问类
+    public                         同一程序集或者引用该程序集的其他程序集都可以访问类
+    abstract 或 internal abstract  只能在同一程序集中访问类，该类不能被实例化，只能被继承
+    public abstract                同一程序集或引用该程序集的其他程序集都可以访问类，但不能被实例化只能被继承
+    sealed 或 internal sealed      只能在统一程序集中访问类，但不能被继承，只能被实例化
+    public sealed                  同一程序集或引用该程序集的其他程序集都可以访问类，不能被继承，只能被实例化
+
+### 类成员的修饰符
+
+    public               同一程序集或引用该程序集的其他程序集都可以访问
+    private              只有同一个类中可以访问
+    protected            只有同一个类或派生类中可以访问
+    internal             只有同一程序集中可以访问
+    protected internal   在同一个程序集、该类和派生类中可以访问
+    readonly             将字段设置为只读
+    const                将字段设置为不变，类比只读（需要在定义时初始化）
+    static               静态字段，不被实例化，一直是一个值
+
+### 属性
+
+    在某字段设为private的时候需要使用属性来对字段进行控制和访问
+    Ep.
+    pulic class Person
+    {
+        private string name;
+
+        public string Name
+        {
+            get  // get访问器 负责对字段值进行读取
+            {
+                return name;
+            }
+            set  // set访问器 负责对字段进行赋值
+            {
+                name = value;  // 使用name隐式参数为name赋值
+            }
+        }
+    }
+
+    也可以使用下方代码进行替换
+    public class Person
+    {
+        private string name;
+
+        public string getname()  // 返回字段
+        {
+            return name;
+        }
+
+        public void setname(string value)  //对字段进行赋值
+        {
+            name = value;
+        }
+    }
+
+    属性可以添加逻辑控制代码
+    public class Person
+    {
+        private int age;
+        public int Age {
+            get
+            {
+                return age;
+            }
+            set
+            {
+                if(value < 0 || value > 20)
+                {
+                    throw (new ArgumentOutOfRangeException("AgeIntPropery",value,"年龄必须在0-120之间"));
+                }
+                age = value;
+            }
+        }
+    }
+
+
+### 方法与方法的重载
+
+    方法由方法签名和一系列语句的代码块组成。其中，方法签名包括方法的访问级别（例如 public或private）、
+    可修饰符（例如abstract关键字）、方法名称和参数。Main方法是每个C#应用 程序的入口点，在启动应用程序时，
+    Main由公共语言运行时（CLR）负责调用。
+
+    public class Person
+    {
+        public string name;
+
+        public string Print()
+        {
+            Console.WriteLine("{0}先生",name);
+        }
+
+        public string Print(string name, int age)   // 方法返回值类型不认为成方法重载
+        {
+            
+        }
+
+        
+
+        public static void Print(string name)  // 使用不同的签名重载Print方法
+        {
+            Console.WriteLine("输入的值为：" + name)
+        }
+    }
+
+    class Program
+    {
+        Person p = new Person();
+        p.name = "张三";
+        p.Print();
+        Person.Print("张三");
+    }
+
+
+### 构造函数
+
+    用于创建类的实例对象
+    与类同名、可以进行方法重载（名称相同签名不同的方法[返回值类型不属于方法签名]）、构造函数不允许有返回类型
+
+    class Person
+    {
+        private string name;
+        private int age;
+        private string degree;
+
+        public Person(string name, int age, string degree)    // 公共构造函数用于创建类的实例对象
+        {
+            this.name = name;
+            this.age = age;
+            this.degree = degree;
+        } 
+    }
+
+## 私有构造函数
+
+    上面的是公共构造函数，私有构造函数只能在类的内部调用，在写完私有构造函数后应同时写一个返回类的实例的静态方法。
+
+    class Person
+    {
+        private string name;
+        public static Person person;
+
+        private Person()
+        {
+            this.name = "CamWang";
+        }
+
+        public static Person GetInstance()
+        {
+            person = new Person();
+            return person
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Person person = Person.GetInstance();
+            .....
+        }
+    }
+
+## 静态构造函数
+
+    用来初始化类中的静态成员，仅执行一次，不能有参数，不能有访问修饰符，无法被调用
+
+    class Person
+    {
+        private static string name;
+
+        static Person()
+        {
+            name = "CamWang";
+        }
+    }
+
+## 析构函数
+
+    C#中的析构函数是被垃圾回收器自动调用的，隐式调用了基类Object的Finalize方法
+
+    class Person
+    {
+        ~Person()
+        {
+            Console.WriteLine("析构函数被调用了");
+        }
+    }
+
+    上方的析构函数会被隐式的解释为下方代码(// try - finally 是C#的异常处理机制)：
+
+    protected override void Finalize()
+    {
+        try
+        {
+            Console.WriteLine("析构函数被调用了");
+        }
+        finally
+        {
+            base.Finalize();  // 调用Object的Finalize方法
+        }
+    }
+
+## 索引器
+
+    用于简化类中数组成员的访问，索引器名称不能自定义。
+
+    [修饰符] 数据类型 this[索引类型 index] 
+    {
+        get{ // 返回类中数组某个元素 }
+        set { // 对类中数组元素赋值 }
+    }
+
+    class Person
+    {
+        private int[] intarray = new int[10];
+        public int this[int index]
+        {
+            get
+            {
+                return intarray[index];
+            }
+            set
+            {
+                intarray[index] = value;
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Person person = new Person();
+            
+            person[0] = 1;
+            person[1] = 2;
+            person[2] = 3;
+
+            .....
+        }
+    }

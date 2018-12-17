@@ -132,8 +132,8 @@ var server = app.listen(8081, function () {
         res.redirect("/"); // 重定向到/ route上，并且传入刚才用户在表单中输入的数据
     })
 
-//MAKE HTTP REQUEST BY NODE
-    //request
+// MAKE HTTP REQUEST BY NODE
+    // request
 
     var request = require('request');
     request('http://google.com',function(error,response,body){
@@ -144,21 +144,22 @@ var server = app.listen(8081, function () {
         }
     });
 
-    //Make JSON file to be js format
+    // Make JSON file to be js format
     request('blablabla.json',function(error,response,body){
         var parsedData = JSON.parse(body);
         console.log(parsedData);
     });
-    
-    //如果json数据储存在分支下例
-    //{query:
-    //    {count:1,
-    //     created:'2016',
-    //     results:{channel:[object]}}}
+
+    // 如果json数据储存在分支下例
+    // {query:
+    //     {count:1,
+    //      created:'2016',
+    //      results:{channel:[object]}}}
     request('blablabla.json',function(error,response,body){
         var parsedData = JSON.parse(body);
         console.log(parsedData["query"]["results"]["channel"]); //["results"][0]来请求result数列的第一个元素
     });
+    // 某个JSON文件的示例
     // {
     //     search:
     //     {
@@ -168,4 +169,37 @@ var server = app.listen(8081, function () {
     //         title:333,
     //     }
     // }
-    //["search"][0]来访问数列的第一个元素["search"][0]["title"]的值为666
+    // ["search"][0]来访问数列的第一个元素["search"][0]["title"]的值为666
+
+    app.get("results", function(req, res){
+        request("http://omdbapi.com/?s=california", function(error, response, body) {  //获取api给出的json，即搜索california的结果
+            if(!error && response.statusCode == 200) {
+                var data = JSON.parse(body);
+                res.render("results", {data: data});    //将data变量以data参数传入results.ejs里，并渲染results.ejs并返回给访问者
+            }
+        });
+    });
+    // results.ejs里的代码
+    // <h1>Result Page!!!!</h1>
+    // <% data["Search"].forEach(function(movie) { %>
+    //     <li><%= movie["Title"] %></li>
+    // <% }) %>
+    //
+    // 现在加一个搜索框来设置?s=后的内容，变成一个搜索器
+    //
+    // search.ejs里的代码
+    // <h1>Search Page!!!!</h1>
+    // <form action="/results" method="GET">      这会将form的内容传入nodejs里接受指向/results的GET方法。
+    //     <input type="text" placeholder="search" name="requestTerm" />   需要为每个在乎的元素设置name
+    //     <input type="submit" />
+    // </form>
+    app.get("results", function(req, res){
+        var search = req.query.requestTerm;   // 通过req.query.input元素的name属性值来获取要搜索的内容是啥
+        var url = "http://omdbapi.com/?s=" + search;
+        request(url, function(error, response, body) {
+            if(!error && response.statusCode == 200) {
+                var data = JSON.parse(body);
+                res.render("results", {data: data});
+            }
+        });
+    });
