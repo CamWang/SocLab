@@ -44,3 +44,128 @@ Java 修饰符
     protected : 对同一包内的类和所有子类可见。使用对象：变量、方法。 注意：不能修饰类（外部类）。
 
 
+Java Class
+    //外部类HelloWorld
+    public class HelloWorld{
+    
+        //外部类的私有属性name
+        private String name = "imooc";
+    
+        //外部类的成员属性
+        int age = 20;
+    
+	    //成员内部类Inner
+	    public class Inner {
+		    String name = "爱慕课";
+            //内部类中的方法
+		    public void show() { 
+			    System.out.println("外部类中的name：" + HelloWorld.this.name);
+			    System.out.println("内部类中的name：" + name);
+			    System.out.println("外部类中的age：" + age);
+		    }
+	    }
+    
+	    //测试成员内部类
+	    public static void main(String[] args) {
+        
+            //创建外部类的对象
+		    HelloWorld o = new HelloWorld (); 
+        
+            //创建内部类的对象
+		    Inner inn = o.new Inner();
+        
+            //调用内部类对象的show方法
+		    inn.show();
+	    }
+    }
+
+    //外部类
+    public class HelloWorld {
+    
+        private String name = "爱慕课";
+    
+        // 外部类中的show方法
+        public void show() { 
+		    // 定义方法内部类
+		    class MInner {
+			    int score = 83;
+			    public int getScore() {
+				    return score + 10;
+			    }
+		    }
+        
+		    // 创建方法内部类的对象
+            MInner mi = new MInner();
+        
+            // 调用内部类的方法
+		    int newScore = mi.getScore();
+        
+		    ystem.out.println("姓名：" + name + "\n加分后的成绩：" + newScore); //println调用了要打印对象的toString()方法，这个toString()方法继承于Object类
+	    }
+    
+	    // 测试方法内部类
+	    public static void main(String[] args) {
+        
+		    // 创建外部类的对象
+            HelloWorld mo = new HelloWorld();
+        
+            // 调用外部类的方法
+		    mo.show();
+	    }
+    }
+
+    equals()方法比较值类型时比较数值，但是比较引用类型时比较的是内存地址。
+    若要比较引用类型的属性值是否相同，在类里重写equals()方法。
+
+JAVA 多态
+
+    父类的引用可以指向本类对象也可以指向子类对象
+    Animal animal1 = new Animal();
+    Animal animal2 = new Dog();
+    使用instanceof来避免在开辟了Dog类型内存空间的情况下强制转换Cat类型导致的运行错误
+    if(animal instanceof Cat) {
+        Cat cat = (Cat)animal;
+    }
+
+JAVA抽象类
+
+    public abstract class Telphone{
+        public abstract void call();
+        public abstract void text();
+    }
+    通过继承来实现他们，抽象类内可以有方法体
+
+JAVA接口
+
+    public interface IBarkable {          //自动添加abstract
+        public void bark();               //自动添加abstract
+    }
+
+    多继承，接口可继承多个接口
+    接口中可以添加属性值，但属性值强制为常量public static final
+    接口中的方法为抽象类
+    实现接口使用implements，一个类只能继承一个父类但可以实现多个接口
+    继承类写在接口前
+    public class Dog entends Animal implements IBarkable, ILickabe, ISleepable {
+
+    }
+
+    //在main方法里实例化Dog
+    IBarkable ib1 = new Dog();
+
+    //匿名内部类
+    //没有名字的内部类，仅仅在使用的时候定义的内部类
+    //直接new一个接口的实例对象
+    IBarkable ib2 = new IBarkable() {
+        public void bark() {
+            System.out.println("汪汪！");
+        }
+    }
+    ib2.bark();
+    //或者更直接
+    new IBarkable() {
+        public void bark() {
+            System.out.println("汪汪！");
+        }
+    }.bark()
+
