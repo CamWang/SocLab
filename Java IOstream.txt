@@ -1,0 +1,243 @@
+String s = "camwang王灿";
+
+// 以十六进制项目默认编码方式显示
+byte[] bytes1 = s.getBytes();  // 以默认编码将字符串s转化为字节数组
+for(byte b : bytes1) {
+    System.out.print(Integer.toHexString(b));
+}
+
+// 以十六进制GBK编码方式显示
+byte[] bytes2 = s.getBytes("gbk");
+for(byte b : bytes1) {
+    System.out.print(Integer.toHexString(b & 0xff));
+}  // GBK编码中文占两个字节，英文占一个字节
+
+// 以十六进制UTF-8编码方式显示
+byte[] bytes3 = s.getBytes("UTF-8");
+for(byte b : bytes1) {
+    System.out.print(Integer.toHexString(b & 0xff));   // 在计算机内存地都是补码，先转化回来
+}  // 中文三个字节，英文一个字节
+
+// JAVA是双字节编码 utf-16be
+byte[] bytes4 = s.getBytes("utf-16be");
+for(byte b : bytes1) {
+    System.out.print(Integer.toHexString(b & 0xff));
+}
+
+// 初始化时用什么编码格式转换时也得用什么编码格式，否则采用默认编码格式
+String str1 = new String(bytes4, "utf-16be");
+
+
+java.io.File类用于表示文件信息（大小、名称）/目录，不能用于读取写入文件
+File file = new File("c:\\javaio\\io.txt");  // 使用转义字符标记\
+File file = new File("c:\\javaio", "io.txt");
+// file.exists();  目录/文件是否存在
+// file.mkdir();  新建目录/文件
+// file.mkdirs();  创建拥有多级目录的
+// file.delete();  删除目录/文件
+// file.isDirectory();  是否是目录，不是和不存在都返回false
+// file.isFile();  是否是文件
+// file.creatNewFile(); 创建文件，价格是否存在的判断
+// 直接打印file.toString();
+// file.getAbsolutePath();  打印绝对路径
+// file.getName();  打印文件或者目录的名字（io.txt javaio）最后的那一个
+// file.getPartent();  父目录路径 = file.getParentFile().getAbsolutePath();
+
+// 写一个file工具类实现过滤、遍历等常用操作
+public class FileUtils {
+
+    // 列出目录以及子目录下的所有文件
+    public static void listDirectory(File dir) throws IOException {
+        if(!dir.exists()) {
+            throw new IllegalArgumentException("目录不存在");
+        }
+        if(!dir.isDirectory()) {
+            throw new IllegalArgumentException("不是目录");
+        }
+//      String [] filenames = dir.list();  // 返回的是字符串数组
+//      for(String a : filenames) {
+//          System.out.println(a);
+//      }
+        File[] files = dir.listFiles();  // 直接以File对象形式返回方便判断是否是文件或文件夹
+        if(files!=null && file.length > 0) {
+            for(File file : files) {
+                if(file.isDirectory()) {
+                    listDirectory(file);  // 递归，传递回写的方法。
+                } else {
+                    sout : file.getName();
+                }
+            }
+        }
+    }
+}
+
+
+// RandomAccessFile - java提供的对文件内容的访问类，既可以读文件也可以写文件
+// RandomAccessFile 可以访问文件的任意位置
+
+1.java文件模型是以byte存储的
+2.打开文件方式
+    rw - 读写
+    r - 只读
+    RandomAccessFile raf = new RandomAccessFile(file, "rw");
+    文件指针，打开文件时指针在开头 pointer = 0;
+3.写文件方法
+    raf.write(int)  // 只写一个字节（二进制后八位），同时指向下一个位置
+4.读方法
+    int b = raf.read()  // 读一个字节
+5.文件读写完成后一定要关闭
+
+public class RafDemo {
+    public static void main(String[] args) throws IOException {
+        File demo = new File("")
+        if(!demo.exists()) {
+            demo.mkdir();
+        }
+        File file = new File(demo, "raf.dat");  // 在demo目录下
+        if(!file.exists) {
+            file.creatNewFile();
+        }
+
+        RandomAccessFile raf = new RandomAccessFile(file,"rw");
+        // raf.getFilePointer() 返回指针位置
+        int i = 0x7fffffff;   // 最大的整数
+        // write()方法每次只能写一个字节 应该需要写四次
+        raf.write(i>>>24);写入高八位
+        raf.write(i>>>16);
+        raf.write(i>>>8);
+        raf.write(i);
+
+        // 可以直接写一个int
+        raf.write(int);
+
+        // 写入字节数组
+        byte[] gbk = s.getBytes("gbk");
+        raf.write(gbk);
+
+        //查询文件长度用raf.length();
+
+        // 读文件
+        raf.seek(0);  // 把指针移到头部
+        //一次性读取
+        byte[] buf = new byte[(int)raf.length()];
+        ref.read(buf);
+        sout : Arrays.toString(buf);
+        for (byte b : buf) {
+            sout : Integer.toHexString(b & 0xff)
+        }
+        ref.close();  // 关闭读取
+    }
+}
+
+
+Java 字节流
+    1.InputStream抽象类 抽象了应用程序读取数据的方式
+    2.OutputStream抽象类 抽象了用用程序写出数据的方式
+    3.EOF = End 读了-1就读到结尾
+    4.输入流基本方法是读
+        int b = in.read(); 读取一个字节，无符号填充到int低八位-1是eof
+        in.read(byte[] buf) 读取数据到字节数组buf里
+        in.read(byte[] buf,int start, int size)
+    5.输出流基本方法
+        out.write(int b) 写出一个byte到流，b的低8位
+        out.read(byte[] buf) 将字节数组buf里数据写入流里
+        out.read(byte[] buf,int start, int size)
+    6.FileInputStream具体实现了文件上读取数据
+        // 读取只能文件内容，按照十六进制输出到控制台并且每输出十个byte换行
+        FileImputSteam in = new FileInputStream(fileName);
+        int b;
+        int i = 1;
+        while((b = in.read())!= -1) {
+            if(b <= 0xf) {
+                // 只有一位的十六位数
+                sout: "0"
+            }
+            sout : Integer.toHexString(b) + " ";
+            if(i++%10==0) {
+                soutln : 换行
+            }
+        }
+        in.close();
+        // 另一个实例
+        FileInputStream in = new FileInputStream(fileName);
+        byte[] buf = new byte[20 * 1024];  // 读取20k的数据
+        int bytes = in.read(buf,0,buf.length);  // 放入buf数组中，从0开始最多放到满，返回读到字节个数，一次性读完
+        int j = 1;
+        for(int i = 0; i < bytes; i++) {
+            if(buf[i] <= 0xf) {
+                sout : 0;
+            }
+            sout : Integer.toHexString(buf[i] + " ");
+            if(j++%10) {
+                sout : 换行
+            }
+        }
+
+        // 也可以写成
+        int bytes = 0;
+        while((bytes = in.read(buf,0,buf.length)) != -1) {
+            sout : Integer.toHexString(buf[i] & 0xff + " ");  // & 0xff是因为byte8位与int32位防止转换错误通过此将高24位清零
+        }
+    
+
+    7.FileOutputSteam
+
+    FileOutputSteam out = new FileOutputSteam("demo/out.dat");  // 如果该文件不存在则创建，如果存在删除后创建
+    out.write('A')  // 只写入了A的低8位
+    int a = 10;  // int一共32位，从左往右依次写入
+    out.write(a >>> 24);  // 写头8位
+    out.write(a >>> 16);
+    out.write(a >>> 8);
+    out.write(a);  // 写末尾8位
+    byte[] gbk = "中国".getBytes("gbk");  // FileOutputSteam的write方法可以写入字节数组
+    out.write(gbk);
+    out.close();  // 关闭写入
+
+    // 复制文件内容
+        判断是否存在(file.exists())和是否是文件还是目录(file.isFile())
+        FileImputSteam in = new FileImputSteam(inFile);
+        FileOutputSteam out = FileOutputSteam(desFile);
+        byte[] buffer = new byte[8*1024];
+        int b;
+        while((b = in.read(buffer,0,buffer.length)) != -1) {
+            out.write(buffer,0,b);
+            out.flush();
+        }
+        in.close();
+        out.close();
+
+    8.DataOutputStream/DataInputStream
+        // 对流功能的拓展，能更方便的读取int, long， 字符类型数据
+        DataOutputStream
+            writeInt()/writeDouble()/writeUTF() - 将前面写几个字节的操作包装
+    // Output demo
+        String file = "demo/dos.dat";
+        // DataOutputStream需要传入一个outputStream对象，实际上就是包装一下普通的输出方式
+        DataOutputStream dos = new DataOutputStream(new FileOutputSteam(file));
+        dos.write(10);
+        dos.writeUTF("卧槽牛皮！");  // 以UTF-8写入
+        dos.writeChars("wdnmd！");  // 以UTF-16be写入
+        dos.close();
+    // Input demo
+        String file = "demo/dos.dat";
+        // DataInputStream需要传入一个inputStream对象，实际上就是包装一下普通的输出方式
+        DataInputStream dos = new DataInputStream(new FileOutputSteam(file));
+        int i = readInt();
+
+    9.BufferedInputStream/BufferedOutputSteam
+        // 提供了带缓冲区的IO，提高了IO的性能
+        // FileOutPutSream -> 以byte为单位
+        // DataOuputStream -> 以各类型占用byte为单位
+        // BufferedOutputSteam -> 大量数据为单位
+        
+        // 写一个进行copy的函数
+        public static void copyFileByBufferedStream() {
+            // BufferedInputStream(InputStream in, int size);
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file1));
+            BufferedOutputSteam bos = new BufferedOutputSteam(new FileOutPutSream(file2));
+            int c;
+            while((c = bis.read()) != -1) {  // 此不等于-1为捕获是否读取结束
+                bos.write(c);
+                bos.flush();
+            }
+        }

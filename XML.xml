@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookstore>
+    <book id="1">
+        <name>Harry Potter : Chapter 1</name>
+        <author>J.K Rollin</author>
+    </book>
+    <book id="2">
+        <name>Harry Potter : Chapter 2</name>
+        <author>J.K Rollin</author>
+    </book>
+</bookstore>

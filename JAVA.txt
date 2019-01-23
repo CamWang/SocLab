@@ -1,18 +1,20 @@
-Class 类名与文件名相同
+父类中必须有无参构造器否则子类会报错
 
-    public class name {                           // 声明类Class
-        public static void main(String []args) {  // 声明方法Method
-            System.out.println("Hello World");
+Scanner
+
+import java.util.Scanner;//导入Scanner类
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);//生成Scanner对象
+        while (sc.hasNextInt()) { 
+            int a = sc.nextInt(); //读下一个整型字符串
+            int b = sc.nextInt();
+            System.out.println(a + b);
         }
+        sc.close(); //用完后关闭扫描器是一个好的习惯
     }
-
-    Class.Method
-
-    javac HelloWorld.java  编译
-    java HelloWorld        运行
-
-    父类中必须有无参构造器否则子类会报错
-
+}
 
 定义
     int a, b, c;             // 声明三个int型整数：a、 b、c
@@ -28,6 +30,19 @@ Class 类名与文件名相同
     int i = 1;
     byte b = (byte)a;   //强制类型转换为byte
 
+进制转换
+    // 十进制转换为其他进制
+    Integer.toHexString(int i)        // 十六
+    Integer.toOctalString(int i)      // 八
+    Integer.toBinaryString(int i)     // 二
+    // 其他进制转换为十进制
+    Integer.valueOf("ffff",16).toString()
+    Integer.valueOf("7777",8).toString()
+    Integer.valueOf("1010",2).toString()
+    Integer.parseInt("1010",2)
+
+    小端法：低位放在低地址
+    大端法：高位放在低地址
 
 变量
     public class Variable{
@@ -38,7 +53,9 @@ Class 类名与文件名相同
         }
     }
 
-String类
+    int数据类型: byte(8bit) short(16bit) int(32bit) long(64bit)
+
+String类 
     判断string是否相同时尽量调用equals()方法，而不能用"=="，
     因为“==”会判断内存中的首地址是否相同，只有在同时声明两个
     相同的字符串时编译器才会分配相同的地址，否则两个字符串内存
@@ -49,6 +66,10 @@ String类
     }
 
     StringBuilder和StringBuffer是两个字符串变量，修改他们不改变内存地址
+
+    String s; byte[] bs = s.getBytes();  字符串 -> 字节数组
+    byte[] bs = new byte[const int]; String s = new String(bs);
+    或 String s = new String(bs, encode)  // encode位编码方式"gb2312" "utf-8"
 
 
 Java 修饰符
@@ -160,8 +181,8 @@ JAVA接口
     接口中的方法为抽象类
     实现接口使用implements，一个类只能继承一个父类但可以实现多个接口
     继承类写在接口前
-    public class Dog entends Animal implements IBarkable, ILickabe, ISleepable {
-
+    public class Dog extends Animal implements IBarkable, ILickabe, ISleepable {
+        // implements接口，extends继承
     }
 
     //在main方法里实例化Dog
@@ -457,3 +478,35 @@ JAVA Generic泛型
     泛型类型集合可以储存子类对象实例
     ChildCourse ccr = new ChildCourse();
     courseList.add(ccr);
+
+
+JAVA 随机数&排序
+    List<Integer> integerList = new ArrayList<Integer>();
+    Random random = new Random();
+    Integer k;
+    for(int i = 0; i < 10; i++) {
+        do {
+            k = random.nextInt(100);  // 随机生成100以内整数
+        } while(integerList.contains(k));  // 防止重复，若重复则继续循环
+        integerList.add(k);
+    }
+    Collections.sort(integerList);
+
+    使用sort方法的对象的类必须实现了Comparable接口，定义默认比较规则，实现compareTo()方法[正大0等负小]
+    Comparator接口用于定义临时比较规则
+
+    public class Student implements Comparable<Student> {
+        public int compareTo(Student o) {
+            return this.id.compareTo(o.id);  // 将compareTo方法设置为按id进行排序，此时id的String可以直接调用compareTo方法
+        }
+    }
+
+    // 定义临时Comparator
+    public class StudentComparator implements Comparator<Student> {
+        public int compare(Student o1, Student O2) {
+            return o1.name.compareTo(o2.name);
+        }
+    }
+    // List.sort()和Collections.sort()都能同时传递待排序序列加用来排序的实现Comparator的对象
+    // 例如
+    Collections.sort(studentList, new StudentComparator());
