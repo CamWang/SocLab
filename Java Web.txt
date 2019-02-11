@@ -34,7 +34,7 @@ Java - URL
             try {
                 URL camwang = new URL("http://camwang.com");   // 会引起异常，捕获异常
                 URL url = new URL("camwang", "/index.jsp?username=tom")
-                String protocol = url.getProtocol();  // 获取页面
+                String protocol = url.getProtocol();  // 获取协议
                 String host = url.getHost();  // 获取主机
                 String port = url.getPort();  // 使用了http默认的80端口返回了-1
                 String path = url.getPath();  // 获取文件路径
@@ -48,3 +48,269 @@ Java - URL
     } 
 
     URL通过openStream()方法来读取网络流
+    public class TryJavaWeb {
+        public TryJavaWeb() {
+            try {
+                URL camwang = new URL("http://camwang.com");   // 会引起异常，捕获异常
+                // 获取该URL的字节输入流
+                InputStream is = url.openStream();
+                // 将字节输入流转化为字符输入流 - 在这里改编码方式
+                InputStreamReader is = new InputStreamReader(is, "utf-8");
+                // 为字符输入流添加缓冲
+                BufferedReader br = new BufferedReader(isr);
+                String data = br.readLine();
+                while(data != null) {
+                    soutln : data;
+                    data = br.readLine();
+                }
+                br.close();
+                is.close();
+                isr.close();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+Socket通信
+
+    TCP协议以字节流发送数据，基于TCP协议实现通信的类
+    服务器：ServerSocket(int port)创建链接对象 -> ServerSocket.acept()阻塞的侦听并连接 ->ServerSocket.close()关闭
+    客户端：Socket(InetAddress, port) -> getInputStream()获取输入流 -> getOutputStream() ->shutdownInput/Output
+    
+    // 使用ObjcetOutputStream对象序列化流，在服务器与客户端之间传递对象
+    OutputStream os = socket.getOutputStream();
+    ObjcetOutputStream oos = new ObjcetOutputStream(os);  // 使用OOS对象序列化流传递对象
+    User user = new User("camwang", "123");  // 新建对象实例
+    oos.writeObjcet(user);
+
+    服务器端:
+        1.创建ServerSocket对象，绑定监听端口
+        2.通过accept()方法监听客户端请求
+        3.获取输入流
+        4.通过输出流发出
+        5.关闭连接
+    客户端：
+        1.创建Socket对象，提供服务器地址和端口号
+        2.通过输出流向服务器端发送请求信息
+        3.同过输入流获取服务器响应
+        4.关闭连接
+    
+    // 服务器:
+        try {
+            // 1.创建ServerSocket
+            ServerSocket serverSocket = new ServerSocket(8888);
+            // 2.调用accept()方法，等待客户端连接
+            System.out.println("服务器即将启动，等待客户端连接...");
+            Socket socket = serverSocket.accept();
+            // 3.获取输入流，并读取信息
+            InputStream is = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String info = null;
+            while ((info = br.readLine()) != null) {
+                System.out.println("我是服务器，接收到了：" + "“" + info +"”");
+            }
+            socket.shutdownInput();
+
+            // 4.给客户端返回信息，获取输出流
+            OutputStream os = socket.getOutputStream();
+            PrintWriter pw = new PrintWriter(os);
+            pw.write("真茄化啊都");
+            pw.flush();  // 刷新流
+
+            // 5.关闭有关资源
+            pw.close();  // 输出流关闭，socket也关闭，所以直接关闭socket即可
+            os.close();
+
+            br.close();
+            isr.close();
+            is.close();
+            socket.close();
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    //客户端:
+        try {
+            // 1.创建客户端Socket，指定服务器地址和端口
+            Socket socket = new Socket("localhost",8888);
+            // 2.创建输出流向服务器发送信息
+            OutputStream os = socket.getOutputStream();  // 字节输出流
+            PrintWriter pw = new PrintWriter(os);  // 将字节输出流包装为打印流
+            pw.write("我叼你妈的真牛批！");
+            pw.flush();
+            socket.shutdownOutput();
+
+            // 3.接受服务器的响应信息
+            InputStream is = socket.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String info = null;
+            while((info = br.readLine()) != null) {
+                System.out.println("我是客户端，我收到了：" + "“" + info + "”");
+            }
+            // 4.关闭资源
+            br.close();
+            is.close();
+
+            pw.close();
+            os.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+多线程客户端通信
+
+    1.服务器端创建ServerSocket，循环调用accept()等待客户端连接
+    2.客户端创建一个socket并请求和服务器端连接
+    3.服务器端接受客户请求，创建socket与该客户建立专线连接
+    4.建立连接的两个socket在一个单独的线程上对话
+    5.服务器端继续等待新的连接
+
+    // 服务器线程类部分，通过创建以下线程类的实例来负责与客户端对话
+
+    public class ServerThread extends Thread {
+        // 将socket定义在每一个线程内
+        Socket socket = null;
+
+        // 当建立一个新的线程时调用构造方法来创建socket实例
+        public ServerThread(Socket socket) {
+            this.socket = socket;
+        }
+
+        // 通过重写Thread接口中run方法线程执行的操作，响应客户端的请求
+        public void run() {
+            try {
+                // 业务逻辑，即上方代码中服务器的3-5部分
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // 服务器主类部分，循环监听端口客户端请求
+
+    public class Server {
+        public static void main(String[] args) {
+            try {
+                System.out.println("服务器即将启动，等待客户端连接...");
+                int count = 0;
+
+                // 创建ServerSocket，并监听8888端口
+                ServerSocket serverSocket = new ServerSocket(8888);
+
+                // 新建Socket，每个Socket与一个客户端单独对话
+                Socket socket = null;
+
+                // 循环监听新请求
+                while(true) {
+                    // 调用accept()方法，等待客户端连接
+                    socket = serverSocket.accept();
+                    // 创建一个新的线程来进行客户端通讯
+                    ServerThread serverThread = new ServerThread(socket);
+                    serverThread.setPriority(4);  // 为线程设置优先级，默认为5，范围[1,10]，越小越低
+                    // 启动线程
+                    serverThread.start();
+                    count++;
+                    System.out.println("新客户上门，一共 " + count + " 个客户");
+                    InetAddress address = socket.getInetAddress();
+                    System.out.println("该客户端IP：" + address.getHostAddress());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+UDP编程
+
+    UDP协议是无连接、不可靠、无序的，速度快，以数据报（Datagram）实行传出
+    DatagramPacket -> 表示数据报
+    DatagramSocket -> 用于发送和接收数据报数据包的套接字
+
+    DatagramPacket(byte[] buf, int length);  // 构造DatagramPacket用来接收长度为length的包
+    DatagramPacket(byte[] buf, int length, InetAddress address, int port);  // 构造数据报包，将长度为length的包发送
+
+    DatagramSocket(int port, InetAddress address);
+    DatagramSocket.send(DatagramPacket p);
+    DatagramSocket.receive(DatagramPacket p);
+
+    // 服务器端
+        1.创建 DatagramSocket ,指定端口号
+        2.创建 DatagramPacket 
+        3.接受客户端发送的信息
+        4.读取数据
+
+    // 客户端
+        1.定义发送的端口号、IP
+        2.创建DatagramPacket，包含要发送的信息
+        3.创建DatagramSocket
+        4.发送数据
+
+    // 服务器端
+
+        /**
+         * 接受并打印客户端发送的数据
+         */
+        // 1.创建 DatagramSocket ,指定端口号
+        DatagramSocket socket = new DatagramSocket(8800);
+        // 2.创建数据报，用于接受客户端发送的数据
+        byte[] data = new byte[1024];
+        DatagramPacket packet = new DatagramPacket(data, data.length);
+        // 3.接收数据
+        System.out.println("服务器已启动！");
+        socket.receive(packet); // 是阻塞方法
+        // 4.读取数据
+        String info = new String(data, 0, packet.getLength());
+        System.out.println("客户端说：" + info);
+
+        /**
+         * 向客户端响应数据
+         */
+        // 1.定义客户端地址、端口号、数据
+        InetAddress address = packet.getAddress();
+        int port = packet.getPort();
+        byte[] data2 = "真茄化啊都！".getBytes();
+        // 2.创建数据报，包含相应的数据信息
+        DatagramPacket packet2 = new DatagramPacket(data2, data2.length, address, port);
+        // 3.响应客户端
+        socket.send(packet2);
+        // 4.关闭socket
+        socket.close();
+
+    // 客户端
+
+        /**
+         * 请求服务器端
+         */
+        // 1.定义服务器地址、端口、数据信息
+        InetAddress address = InetAddress.getByName("localhost");
+        int port = 8800;
+        byte[] data = "我打你妈卖批哦！".getBytes();
+        // 2.创建数据报，包含发送的数据信息
+        DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
+        // 3.创建DatagramSocket对象
+        DatagramSocket socket = new DatagramSocket();
+        // 4.向服务器端发送数据报
+        socket.send(packet);
+
+        /**
+         * 接受服务器端响应数据
+         */
+        // 1.创建数据报，用来接收服务器端响应数据
+        byte[] data2 = new byte[1024];
+        DatagramPacket packet2 = new DatagramPacket(data2, data2.length);
+        // 2.接受服务器响应数据
+        socket.receive(packet2);
+        // 3.读取数据并输出
+        String reply = new String(data2, 0, packet2.getLength());
+        System.out.println("服务器说：" + reply);
+        // 4.关闭资源
+        socket.close();

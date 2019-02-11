@@ -1,0 +1,47 @@
+Servlet
+    Servlet是运行在服务器上的小程序。一个Servelet就是一个java类，
+    并且可以通过“请求-响应”编程模型来访问这个留在服务器内存里的Servlet程序。
+    Tomcat分为四层，最内层是Servlet，Tomcat管理Servlet。
+    Servlet容器管理Context容器，一个Context对应一个Web工程。
+
+    自定义Servlet           ->   重写doGet与doPost方法
+    ↓
+    HttpServlet[抽象类]     ->   实现了http协议的Servlet
+    ↓
+    GenericServlet[抽象类]  ->   与协议无关的Servlet
+    ↓
+    Servlet[接口]           ->    三个方法：Init() service() destroy()
+
+    // 编写Servlet
+        1. 编写实现servlet的类继承于HttpServlet
+        2. 重写doGet()[响应get请求]或者doPost()[响应post请求]方法
+
+        public class HelloServlet extends HttpServlet {
+            @Override
+            protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+                System.out.println("HelloServlet:处理Get请求....");
+                PrintWriter out = resp.getWriter();
+                resp.setContentType("text/html");
+                out.println("<h2>Hello Servlet!</h2><br>");  // 返回html
+            }
+
+            @Override
+            protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+                ....
+            }
+        }
+
+        3. 在web.xml中注册Servlet
+
+        <servlet>
+            <servlet-name>HelloServlet</servlet-name>
+            <servlet-class>servlet.HelloServlet</servlet-class>  // 响应用的class
+            <load-on-startup>1</load-on-startup>  // 初始化时的加载优先级，数字越高优先级越高
+        </servlet>
+
+        <servlet-mapping>
+            <servlet-name>HelloServlet</servlet-name>
+            <url-pattern>/servlet/HelloServlet</url-pattern>  // 响应的请求
+        </servlet-mapping>
+
+        // 装载Servlet的三种条件：用户请求，表明load-on-startup，Servlet类源代码文件被更新后会自动重装。

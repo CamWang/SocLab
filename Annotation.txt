@@ -1,0 +1,105 @@
+Java注解
+
+    // JDK注解
+    @Override  // 重写了父类的方法，若父类没有定义这个方法编译器就会报错
+    @Deprecated  // 标记过时方法，不建议被采用
+    @Suppvisewarnings  // 忽略了某个警告 @Suppvisewarnings("警告信息")
+
+    // Spring注解
+    @Autowired  // 自动生成XML注入实例
+    @Service
+    @Repository
+
+    // Mybatis
+    @InsertProvider
+    @UpdateProvider
+    @Options
+
+    // 注解的分类
+    按照运行机制分：
+        源码注解（只在源码中存在编译后消失）
+        编译时注解（源码、class文件都存在，跟编译器沟通，例如Override等）
+        运行时注解（在运行时也会起作用，例如Autowired）
+    按照来源分
+        来自JDK的注解
+        来自第三方的注解  // 大多数
+        我们自己定义的注解
+    元注解：注解的注解
+
+    // 自定义注解
+
+        // 元注解
+        @Target({ElementType.METHOD, ElementType TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        // 注解实际声明（上下两部分一体）
+        public @interface Description {  // 使用@interface关键词定义自定义注解
+            String desc();  // 注解成员以无参无异常方式声明
+            String author();
+            int age() default 18;  // 可以用default为成员并指定一个默认值
+        }
+
+        // 注解成员是受限制的，合法的类型包括原始类型及String,Class,Annotation,Enumeration
+        // 如果注解只有一个成员，则成员名必须取名未value()，在使用时可以忽略成员名和赋值号（=）
+        // 注解类可以没有成员，没有成员的注解称为表示注解
+
+        @Target({ElementType.METHOD, ElementType TYPE})
+            // 注解作用域，后接作用域列表，有
+            CONSTRUCTOR 构造方法
+            FIELD 字段
+            LOCAL_VARIABLE 局部变量
+            METHOD 方法
+            PACKAGE 包
+            PARAMETER 参数
+            TYPE 类，接口
+        @Retention(RetentionPolicy.RUNTIME)
+            // 声明周期
+            SOURCE 源代码
+            CLASS 编译器，会记录到class中，运行时忽略
+            RUNTIME 运行时存在，可通过反射读取
+        @Inherited
+            // 标识后允许子类继承
+        @Documented
+            // 生成Doc时会包含注解信息
+
+    // 使用注解
+
+        @<注解名>(<成员1>=<成员1的值>, <成员2>=<成员2的值>....)
+
+        @Description(desc = "Mother Fucker!", author = "Samuel Jackson", age = 18)
+        public String eye() {
+            sout
+        }
+
+    // 解析注解
+        // 1.使用类加载器加载类
+        Class c = Class.forName("class1");
+        // 2.找到类的注解
+        boolean isExist = c.isAnnotationPresent(Description.class);
+        if(isExist) {
+            // 3.拿到注解
+            Description d = (Description)c.getAnnotation(Description.class);
+            System.out.println(d.value());
+        }
+
+        // 4.找到方法上的注解
+        Method[] ms = c.getMethods();
+        for(Method m : ms) {
+            boolean is MExist = m.isAnnotationPresent(Description.class);
+            if(isMExist) {
+                // 3.拿到注解
+                Description d = (Description)m.getAnnotation(Description.class);
+                System.out.println(m.value());
+            }
+        }
+        // 另一种解析方法
+        for(Method m : ms) {
+            Annotation[] as = m.getAnnotations();
+            for(Annotation a : as) {
+                if(a instanceof Description) {
+                    Description d = (Description)a;
+                    System.out.println(d.value());
+                }
+            }
+        }

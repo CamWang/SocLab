@@ -1,0 +1,141 @@
+// 基础知识
+
+public class reflect {
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+
+        // Student的实例对象如何表示
+        Student student = new Student();
+
+        // 任何一个类都是Class的实例对象，这个实例对象有三种表示方式
+
+        // 1. 任何一个类都有一个隐含的静态成员class
+        Class class1 = Student.class;
+
+        // 2. 已经知道该类的对象通过getClass方法
+        Class class2 = student.getClass();
+
+        // 3. forName方法返回与给出类或结构名相关联的类的对象
+        // forName获取为动态加载，编译时刻加载是静态加载，运行时刻加载时动态加载
+        Class class3 = null;
+        class3 = Class.forName("com.camwang.reflect.Student");
+
+
+        // class1, class2, class3表示了Student类的类类型，所有类的母类，class1==class2==class3。
+
+        // 可以通过类的类类型来创建该类的对象实例
+        Student student2 = (Student)class1.newInstance();  // 需要有无参的构造方法 newInstance提供了不知道该类名称时创建这个类的实例
+    }
+}
+
+
+// 静态加载类与动态加载类的引入
+
+class Office {
+    public static void main(String[] args) {
+
+        // 静态加载类，若Word类与方法编写完成，但Excel类未编写则在编译时报错
+        // 通过动态加载类可以在运行时刻加载所需要的类
+
+        if("Word".equals(args[0])) {   // arg[0]为控制台输入的参数
+            Word w = new Word();
+            w.start();
+        }
+        if("Excel".equals(args[0])) {
+            Excel e = new Excel();
+            e.start();
+        }
+    }
+}
+
+
+// 动态加载类
+
+class OfficeBetter {
+    public static void main(String[] args) {
+        try{
+
+            // 动态加载类，在运行时刻加载，与具体类解耦，在运行时刻若无args[0]所示类才报错
+            Class c = Class.forName(args[0]);
+
+            // 通过类类型，创建该类的对象
+            // 此时需要强制类型转换，但为了彻底解耦不能用任何具体的类名
+            // 可以通过让类均实现某接口来实现
+            OfficeAble oa = (OfficeAble)c.newInstance(); 
+            oa.start();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+// 基本类型的类类型
+
+public class Demo {
+    public static void main(String[] args) {
+
+        Class c1 = int.class;
+        Class c2 = String.class;
+        Class c3 = void.class;
+
+        System.out.println(c1.getName());  // 返回int
+        System.out.println(c2.getName());  // 返回java.lang.String
+        System.out.println(c3.getSimpleName());  // 返回String
+        System.out.println(c3.getName());  // 返回void
+
+    }
+}
+
+
+// 打印类信息的demo
+
+public class ClassUtil {
+    /**
+    * 打印类的信息（类的成员函数、成员变量）
+    * @param obj该对象所属类的信息
+    **/
+
+    public static void printClass(Object obj) {
+        // 获取类的类类型
+        Class c = obj.getClass();  // 传递的是哪个子类的对象，就获得哪个子类的类类型
+        // 获取类的名称
+        System.out.println("类的名称是:" + c.getName());
+        
+        /**
+        * Method是方法对象
+        * 一个成员方法就是一个Method对象
+        * getMethods()方法获取所有public的方法，包括继承来的
+        * getDeclaredMethods()方法获取该类声明的所有方法不论权限，无父类方法
+        **/
+
+        // 获取所有方法
+        Method[] ms = c.getMechods();  // 或c.getDeclaredMethods();
+        for(int i = 0; i < ms.length; i++) {
+            // 打印方法返回值类型
+            Class returnType = ms[i].getReturnType();  // getReturnType()获取的是返回值类型的类类型
+            System.out.print(returnType.getName() + " ")
+            // 打印方法名称
+            System.out.println(ms[i].getName() + "(");
+            // 打印参数类型
+            Class[] paramTypes = ms[i].getParameterTypes();  // 获取参数列表类型的类类型
+            for(Class s : paramTypes) {
+                System.out.print(s.getName() + ",");
+            }
+            System.out.println(")");
+        }
+
+        /**
+        * 成员变量也是对象
+        * java.lang.reflect.Field，Field类封装了关于成员变量的操作
+        * getFields()方法获取的是所有的public的成员变量的信息
+        * getDeclaredFields()方法获取的是所有在此类中声明的成员变量的方法
+        **/
+
+        Field[] fs = c.getDeclaredFields();
+        for(Fiele f : fs) {
+            // 得到成员变量的类型的类类型
+            Class fieldType = field.getType();
+        }
+    }
+}

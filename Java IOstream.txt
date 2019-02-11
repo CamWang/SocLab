@@ -131,6 +131,7 @@ public class RafDemo {
 
 
 Java 字节流
+
     1.InputStream抽象类 抽象了应用程序读取数据的方式
     2.OutputStream抽象类 抽象了用用程序写出数据的方式
     3.EOF = End 读了-1就读到结尾
@@ -235,9 +236,122 @@ Java 字节流
             // BufferedInputStream(InputStream in, int size);
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file1));
             BufferedOutputSteam bos = new BufferedOutputSteam(new FileOutPutSream(file2));
-            int c;
+            int c;  // 字符实质为16位无符号整数
             while((c = bis.read()) != -1) {  // 此不等于-1为捕获是否读取结束
                 bos.write(c);
-                bos.flush();
+                bos.flush();   // 带缓冲的必须要flush
             }
         }
+
+
+Java 字符流
+
+    // 文本(char)是十六位无符号整数，是字符的unicode编码
+    // 文件(file)是由byte组成的数据序列
+    // 文本文件时文本序列按照某种编码方式序列化为byte的存储结果
+
+    1.字符流 Reader/Writer
+
+        // 其本质还是基本的字节序列读取或写出
+        InputStreamReader - 将byte流解析为char流，按照编码处理
+        OutputStreamWriter - 将char流解析为byte流，按照编码处理
+
+        // 可以传入字符集，否则为项目默认
+        InputStreamReader isr = new InputStreamReader(new FileInputStream("camwang.txt"), "UTF-8");
+        int c;
+        // 单个读取时，read()返回当前字符对应int值
+        while((c = isr.read()) != -1) {
+            sout : (char)c;  // 字符实际是16位无符号整数
+        }
+
+        // 采用缓冲区
+        char[] buffer = new char[8*1024];
+        int c;
+        // 批量读取时read()方法返回读取字符数，放满自动读下一次
+        while((c = isr.read(buffer,0,buffer.length)) != -1) {
+            String s = new String(buffer,0,c);
+            System.out.print(s)
+        }
+        isr.close();
+
+    2.FileReader/FileWriter
+
+        // 无法确定UTF-8只能用上方的方法
+        FileReader fr = new FileReader(file1);  // 直接放入路径注意转义
+        FileWriter fw = new FileWriter(file2, true);  // 加参数true会在原有文件里追加新字符
+        char[] buffer = new char[2048];
+        int c;
+        while((c = fr.read(buffer,0,buffer.length)) != -1) {
+            fw.write(buffer,0,c);
+            fw.flush();
+        }
+        fr.close();
+        fw.close();
+
+    3.字符流过滤器
+        BufferedReader - readLine()一次读一行 不识别换行
+        BufferedWriter/PrintWriter - 一次写一行
+
+        BufferedReader br = new BufferedReader(
+            new InputStreamReader(
+                new FileInputStream("c:\\camwang.txt"),"UTF-8"));
+        BufferedWriter bw = new BufferedWriter(
+            new OutputStreamWriter(
+                new FileOutputStream("c:\\camwang1.txt"),"UTF-8"));
+
+        // PrintWriter构造更加简单，与BufferedReader配合起来用
+        PrintWriter pw = new PrintWriter("c:\\camwang2.txt");
+
+        String line;
+        while((line = br.readLine()) != null) {
+            System.out.println(line);
+            bw.writeLine(line);
+            bw.newLine();
+            bw.flush();
+
+            pw.println(line);
+            pw.flush();
+        }
+        br.close();
+        pw.close();
+
+
+Java 序列化与反序列化
+
+    序列化的对象方便在网络上传输
+    1.对象的序列化就是将Object转换为byte序列，反过来叫对象的反序列化
+    2.序列化流(ObjectOutputStream)writeObjcet方法，是过滤流。反序列化流(ObjectInputStream)readObjcet方法。
+    3.对象必须实现序列化接口 Serializable
+
+    // 序列化实例的示例
+    ObjectOutputStream oos = new ObjectOutputStream(
+        new FileOutPutSream("camwang.dat"));
+    Student stu = new Student("001","王灿",20);
+    oos.writeObjcet(stu);
+    oos.flush();
+    oos.close();
+    // 序列化实际调用方法
+    private void writeObjcet(java.io.ObjcetOutputStream s) throws java.io.IOException {
+        s.defaultWriteObjcet();  // 进行jvm的默认序列化操作
+        s.writeInt(stuAge);  // 将写了transient关键字的元素序列化
+        s.writeObject(....);
+    }
+
+    // 对象
+    public class Student implements Serializable {
+        // 内部不需要实现任何多余方法，仅实现即可
+        // 若类内部有不想被序列化的部分，可以添加transient关键词
+        private transient int stuAge;
+    }
+
+    // 反序列化
+    ObjectInputStream ois = new ObjectInputStream(
+        new FileInputStream(file));
+    Student stu = (Student)ois.readObject();
+    ois.close();
+    // 反序列化实际调用方法 - 可以自己实现
+    private void readObject(java.ObjectInputStream s) throws java.io.IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        this.stuAge = s.readInt();
+    }
+    // 在某些时候可以提高性能，比如ArrayList内

@@ -1,0 +1,38 @@
+public class DBUtil {
+
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/test?serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASSWORD = "root";
+
+    public static void main(String[] args) {
+
+        try {
+
+            // 1.加载驱动程序
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // 2.获得数据库的连接
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            // 3.通过连接操作数据库，实现增删改查
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT id,name FROM tryjdbc;");
+
+            while(rs.next()) {
+                System.out.println(rs.getLong("id") + ", " + rs.getString("name"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+
+MVC架构
+
+    View（视图层）：展示层
+    ↑↓
+    Control（控制层）：控制增删改查
+    ↑↓
+    Model（模型层）：数据映射和增删改查等抽象方法
+    ↑↓
+    DB（数据库）

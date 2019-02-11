@@ -1,0 +1,85 @@
+Windows CMD下MySQL的启停
+    >net stop mysql
+    >net start mysql
+
+
+MySQL基础操作
+    mysql -u用户名 -p密码 -P端口 -h服务器名称/IP[--host] -V版本号[--version]
+        --prompt 提示符[更改登陆进去之后显示的mysql>，\D日期 \d当前数据库 \h服务器名称 \u用户名]可在登陆后使用PROMPT+关键字组合
+    mysql> exit; quit; \q; 退出
+
+
+MySQL数据类型
+    // 整形
+    TINYINT         1byte   + UNSIGNED 表示无符号
+    SMALLINT        2byte
+    MEDIUMINT       3byte
+    INT             4byte
+    BIGINT          8byte
+
+    // 浮点型
+    FLOAT[(M,D)]    7位小数   M总多少位，D小数位 UNSIGNED位数翻倍
+    DOUBLE[(M,D)]   好多位
+
+    // 时间日期型
+    YEAR  TIME  DATE  DATETIME  TIMESTAMP
+
+    // 字符型
+    CHAR(M)                     M个字节，M取0~255
+    VARCHAR(M)                  储存M个字节，占用M+1个字节
+    TINYTEXT                    0-255字节
+    TEXT                        0-65,535字节
+    MEDIUMTEXT                  0-16,777,215字节
+    LONGTEXT                    0-4,294,967,295字节
+    ENUM('value1',...)          在多个值中做选择
+    SET('value1','value2'....)  集合，最多64个成员，做任意排列组合
+
+
+MySQL语句
+    关键字、函数名称大写，数据库、表、字段名称全部小写，SQL语句以分号结尾
+    {}内元素至少要有，|两者选一个相同意义，[]为可写可不写描述，
+
+    SELECT VERSION();  显示版本
+    SELECT NOW();      显示当前日期
+    SELECT USER();     显示当前用户
+
+    // 创建
+    CREATE {DATABASE | SCHEMA} [IF NOT EXISTS]//有重复数据库则直接重写 db_name [DEFAULT] CHARACTER SET [=] charset_name;
+    ep. CREATE DATABASE database1;
+    CREATE TABLE [IF NOT EXISTS] table_name (
+        column_name data_type data_describe column_describe,  
+        .....
+    );  
+
+    data_describe: [UNSIGNED]
+    column_describe: [NOT NULL] [AUTO_INCREMENT(当选择自增时必须设置为主键) PRIMARY KEY]
+
+    // 查看
+    SHOW {DATABASES | SCHEMAS} [LIKE 'pattern' | WHERE expr];  // 查看所有数据库/指定数据库
+    ep. SHOW DATABASES;
+    SHOW WARNINGS;  // 查看警报
+    SHOW CREATE DATABASE db_name;  // 查看创建数据库的命令
+    SELECT DATEBASE();  //展示用户选择的数据库
+    SHOW TABLES [FROM db_name] [LIKE `pattern` | WHERE expr];  // 当前数据库不变化，查看数据表
+    SHOW COLUMNS FROM table_name;  // 查看数据表结构
+
+    // 打开数据库
+    USE db_name;
+
+    // 修改数据库
+    ALTER {DATABASE | SCHEMA} [db_name] [DEFAULT] CHARACTER SET [=] charset_name;
+
+    // 删除数据库
+    DROP {DATABASE | SCHEMA} [IF EXISTS] db_name;
+
+    // 插入记录
+    INSERT [INTO] table_name [(col_name,....)] VALUES(val,......)  // 如果省略col_name，每个记录的所有列都要赋值
+
+    // 记录查找
+    SELECT express,... FROM table_name;
+    ep. SELECT * FROM tb1;
+
+
+MySQL主键
+
+    // 表级、列级的唯一性、默认为NOT NULL。
