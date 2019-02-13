@@ -1,31 +1,25 @@
+连接数据库
+
 public class DBUtil {
 
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/test?serverTimezone=UTC";
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
-    public static void main(String[] args) {
+    static {
 
-        try {
-
-            // 1.加载驱动程序
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            // 2.获得数据库的连接
-            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            // 3.通过连接操作数据库，实现增删改查
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id,name FROM tryjdbc;");
-
-            while(rs.next()) {
-                System.out.println(rs.getLong("id") + ", " + rs.getString("name"));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        // 1.加载驱动程序
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        // 2.获得数据库的连接
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
     }
+
+    public static Connection getConnection() {   // 将连接以方法形式传递出去方便其他方法调用
+        return conn;
+    }
+
 }
+
 
 MVC架构
 
@@ -33,6 +27,202 @@ MVC架构
     ↑↓
     Control（控制层）：控制增删改查
     ↑↓
-    Model（模型层）：数据映射和增删改查等抽象方法
+    Model（模型层）：数据映射 和 增删改查等抽象方法
     ↑↓
     DB（数据库）
+
+    由下向上设计
+
+
+    ## MODEL
+
+    // 实体类
+    public class Student {
+        pirvate Integer id;
+        private String name;
+        private Integer age;
+        private Date birthday;
+
+
+    }
+
+    // DAO增删改查抽象方法
+    public class StudentDAO {
+
+        public void addStudent(Student stu) {    // 传入要添加的学生信息
+            
+            // 1.获取数据库连接
+            Connection conn = DBUtil.getConnection();
+
+            // 2. 操作执行Insert语句，过程中使用预编译语句
+            Statement stmt = conn.createStatement();
+            String sql = "" +
+                        "INSERT INTO tryjdbc " +    // id假设自增长
+                        "(name,age,birthday,creat_date)" +
+                        "VALUES(" +
+                        "?,?,?,current_date())";
+
+            // 预编译语句，先对语句进行补全操作，调用excute()方法时执行
+            PrepagedStatement ptmt = conn.prepareStatement(sql);
+            // 传递参数
+            ptmt.setString(1, stu.name);
+            ptmt.setInt(2, stu.age);
+            ptmt.setDate(3, new Date(g.getBirthday().getTime()));  // 将java.util.Date转换为java.sql.Date类型
+            ptmt.excute();    // 执行不返回参数的操作
+
+            ResultSet rs = stmt.executeQuery("SELECT id,name FROM tryjdbc;");
+
+        }
+
+        public void updateStudent(Student stu) {       // 更新学生信息
+
+            // 1.获取数据库连接
+            Connection conn = DBUtil.getConnection();
+
+            // 2. 操作执行Insert语句，过程中使用预编译语句
+            Statement stmt = conn.createStatement();
+            String sql = "" +
+                        "UPDATE tryjdbc " +    // id假设自增长
+                        "SET name=?,age=?,birthday=?,creat_date=?" +
+                        "WHERE id=?";          // 一定要加where否则整张表都会被更新
+
+            // 预编译语句，先对语句进行补全操作，调用excute()方法时执行
+            PrepagedStatement ptmt = conn.prepareStatement(sql);
+            // 传递参数
+            ptmt.setString(1, stu.name);
+            ptmt.setInt(2, stu.age);
+            ptmt.setDate(3, new Date(g.getBirthday().getTime()));  // 将java.util.Date转换为java.sql.Date类型
+            ptmt.execute();
+
+            ResultSet rs = stmt.executeQuery("SELECT id,name FROM tryjdbc;");
+        }
+
+        public void delStudent(Integer id) {
+
+            // 1.获取数据库连接
+            Connection conn = DBUtil.getConnection();
+
+            // 2. 操作执行Insert语句，过程中使用预编译语句
+            Statement stmt = conn.createStatement();
+            String sql = "" +
+                        "DELETE FROM tryjdbc " +    // id假设自增长
+                        "WHERE id=?";          // 一定要加where否则整张表都会被更新
+
+            // 预编译语句，先对语句进行补全操作，调用excute()方法时执行
+            ptmt.setInt(1, id);
+            ptmt.execute();
+
+        }
+
+        public List<Student> query() {  // 查询所有学生
+
+            // 1.获取数据库连接
+            Connection conn = DBUtil.getConnection();
+            // 3.通过连接操作数据库，实现增删改查
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT id,name FROM tryjdbc;");
+
+            List<Student> stuList = new ArrayList<Student>();
+            Student stu = null;
+
+            while(rs.next()) {
+                stu = new Student;
+                stu.setName(re.getInt("id"));
+                stu.setAge(rs.getInt("age"));
+                stuList.add(stu);
+                System.out.println("查询并将此学生写入到stuList列表中：" + stu.getId + ", " + stu.getName);
+            }
+            return stuList;
+        }
+
+        public Student get(Integer id) {  // 查询单个学生
+
+            // 1.获取数据库连接
+            Connection conn = DBUtil.getConnection();
+
+            // 2. 操作执行Insert语句，过程中使用预编译语句
+            Statement stmt = conn.createStatement();
+            String sql = "" +
+                        "SELECT * FROM tryjdbc " +    // id假设自增长
+                        "WHERE id=?";          // 一定要加where否则整张表都会被更新
+
+            // 预编译语句，先对语句进行补全操作，调用excute()方法时执行
+            ptmt.setInt(1, id);
+            ResultSet rs = ptmt.executeQuery(sql);
+
+            Student stu = null;
+            while(rs.next()) {
+                stu = new Student();
+                stu.setId(rs.getInt("id"));
+                stu.setName(rs.getString("name"));
+                stu.setAge(rs.getInt("age"));
+                stu.setBirthday(rs.getDate("Birthday"));   // java.sql.Time是java.util.Time的子集，所以不用再转换了
+            }
+
+            return stu;
+        }
+
+
+        // 如果想按照具体条件来查询时，使用一个概括查询参数的类例如query类，
+        // 该类下有name（查询的列名称）、rela（大于小于等于等关系）、value（查询的值）
+        // 再将所有要求打包成List传入query方法，再使用StringBuilder将所有要求连接起来
+
+        public List<Student> query(List<Map<String, Object>> params) {
+
+            Connection conn = DBUtil.getConnection();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("SELECT * FROM tryjdbc WHERE 1=1 ");   // 因为必须追加where来接条件，而且不能直接加and，所以设置一个恒等条件
+
+            if((params != null) && (params.size() > 0)) {
+                for (Map<String, Object> m : params) {       // 提取所有条件对象并且写到SQL语句里
+                    sb.append("AND " + m.get("name") + " " + m.get("rela") + " " + m.get("value") + " ");
+                }
+            }
+
+            return stuList;
+        }
+    }
+
+
+    ## ACTION (Controller)
+
+    public class Action {
+        public static void main(String[] args) {
+
+            try {
+                Scanner sc = new Scanner(system.in);
+            
+                // 新建DAO的实例
+                StudentDAO sd = new StudentDAO();
+
+                // 执行DAO的插入方法在数据库内插入一位学生
+                Student s = new Student();
+                s.setName = sc.nextString();
+                s.setAge = sc.nextInt();
+                ....
+                sd.addStudent(s);
+
+                // 执行DAO的query方法返回查询到的所有学生
+                List<Student> stuList = sd.query();
+                // 打印查询到的学生
+                for(Student s : stuList) {
+                    System.out.println(s.getId() + "," + s.getName());
+                }
+
+
+                // 使用List形式将多个条件传入Map储存的<字符串, 对象>键值对
+                List<Map<String, Object>> params = new ArrayList<Map<String, Object>>;
+                Map<String, Object> param = new HashMap<String, Object>;
+                param.put("name", "name");   // 查询条件名
+                param.put("rela", "like");   // 表达式
+                param.put("value", "'%王%'"); // 值
+                params.add(param);   // 将此查询条件存入查询条件集合中
+                // 执行查询并保存
+                List<Student> result = stu.query(params);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
