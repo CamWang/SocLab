@@ -1,0 +1,20 @@
+进程：
+程序的执行过程（动态），持有资源（内存）和线程(某一功能等，系统中最小的单元)
+
+Thread(Class)\Runnable(interface) -> public void run()
+
+线程的创建:
+    Thread()
+    Thread(String name)
+    Thread(Runnable target)
+    Thread(Runnable target, String name)
+线程的方法：
+    void start()    // 启动线程
+    static void sleep(long millis)  // 线程休眠（精确到毫秒） Thread.sleep(1000);
+    static void sleep(long millis, int nanos)   // 线程休眠（精确到纳秒）
+    void join()
+    void join(long millis)  // 参数为等待最长时间，无参则允许无限等待当前进程结束
+    void join(long millis, int nanos)  // 使其他线程等待当前线程终止
+    static void yield() // 当前运行线程释放处理器资源
+获取线程引用
+    static Thread currentThread()   // 返回当前运行的线程引用
