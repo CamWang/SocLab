@@ -1,459 +1,111 @@
-Class 类名与文件名相同
+String
+    .startsWith(Strting s, int offset)
+    .endsWith(String s)
+    .regionMathches(int )
+    .compareTo()
+    .indexOf()
+    .subString(index) 获取index之后的字符串
+    .replaceAll(String old, String new)
+    .trim() 去空格
 
-    public class name {                           // 声明类Class
-        public static void main(String []args) {  // 声明方法Method
-            System.out.println("Hello World");
-        }
+StringTokenizer 分解字符
+    StringTokenizer(String s, String delimeter)
+    .countTokens()
+    .hasMoreTokens()
+    .nextToken()
+
+String
+    .append()
+    .charAt()
+    .setCharAt()
+    .insert(int index, String str)
+    .reverse()
+    .delete(int, int)
+    .replace(int start, int end, string)
+    .matches(regex)
+
+Date
+    y yy yyyy
+    M MM MMM汉字
+    d dd
+    H HH
+    M MM
+    s ss
+    E 星期
+SimpleDateFormat("事件:yyyy年MM月dd日HH时mm分ss秒")
+SimpleDateFormat.format(Date date)
+Calendar calendar = Calendar.getInstance();
+
+Frame
+    在继承Frame类的类内的构造方法内调用这些
+    setBounds(a, b, width, height)
+    setVisible(boolean b)
+    super(s)设置标题
+
+ActionListener
+    Object.addActionListener
+    e.getSource()获得引用
+    重写actionPerformed(ActionEvent e)
+    只要实现ActionListener接口就能addActionListener，
+
+File f = new File("blabalbla")  .delete()
+FileInputStream istream = new FileInputStream(f); IOException .read() .close
+FileWriter out = new FileWriter();
+out.write(a, 0 a.length);
+
+ObjectInputStream ObjectOutputStream对象必须implements Serializable
+
+URL url = new URL("http://....)
+InputStream in = url.openStream();
+
+InetAddreass address= InetAddreass.getByName("ip or url")
+    .getHostName()
+    .getHostAddress()
+    套接字就是IP地址与端口号的组合
+    Socket socket = new Socket("url", port)
+    DataInputStream in = new DataInputStream(socket.getInputStream());
+    DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+    in.readUTF();
+    out.writeUTF();
+    Serversocket server_socket = new Serversocket(port);
+    server_socket.accept()
+    while(true)
+    {
+        in.readUTF()
     }
 
-    Class.Method
-
-    javac HelloWorld.java  编译
-    java HelloWorld        运行
-
-    父类中必须有无参构造器否则子类会报错
-
-
-定义
-    int a, b, c;             // 声明三个int型整数：a、 b、c
-    int d = 3, e = 4, f = 5; // 声明三个整数并赋予初值
-    byte z = 22;             // 声明并初始化 z
-    String s = "runoob";     // 声明并初始化字符串 s
-    double pi = 3.14159;     // 声明了双精度浮点型变量 pi   默认为0.0d    float默认值为0.0f
-    char x = 'x';            // 声明变量 x 的值是字符 'x'。
-
-
-强制类型转换
-(type)value
-    int i = 1;
-    byte b = (byte)a;   //强制类型转换为byte
-
-
-变量
-    public class Variable{
-        static int allClicks=0;    // 类变量
-        String str="hello world";  // 实例变量
-        public void method(){
-            int i = 0;             // 局部变量
-        }
-    }
-
-String类
-    判断string是否相同时尽量调用equals()方法，而不能用"=="，
-    因为“==”会判断内存中的首地址是否相同，只有在同时声明两个
-    相同的字符串时编译器才会分配相同的地址，否则两个字符串内存
-    地址不同。
-
-    if(myName.equals("thug")) {
-        ......
-    }
-
-    StringBuilder和StringBuffer是两个字符串变量，修改他们不改变内存地址
-
-
-Java 修饰符
-    default  (即缺省，什么也不写）: 在同一包内可见，不使用任何修饰符。使用对象：类、接口、变量、方法。
-    private : 在同一类内可见。使用对象：变量、方法。 注意：不能修饰类（外部类）
-    public : 对所有类可见。使用对象：类、接口、变量、方法
-    protected : 对同一包内的类和所有子类可见。使用对象：变量、方法。 注意：不能修饰类（外部类）。
-
-
-Java Class
-    //外部类HelloWorld
-    public class HelloWorld{
-    
-        //外部类的私有属性name
-        private String name = "imooc";
-    
-        //外部类的成员属性
-        int age = 20;
-    
-	    //成员内部类Inner
-	    public class Inner {
-		    String name = "爱慕课";
-            //内部类中的方法
-		    public void show() { 
-			    System.out.println("外部类中的name：" + HelloWorld.this.name);
-			    System.out.println("内部类中的name：" + name);
-			    System.out.println("外部类中的age：" + age);
-		    }
-	    }
-    
-	    //测试成员内部类
-	    public static void main(String[] args) {
-        
-            //创建外部类的对象
-		    HelloWorld o = new HelloWorld (); 
-        
-            //创建内部类的对象
-		    Inner inn = o.new Inner();
-        
-            //调用内部类对象的show方法
-		    inn.show();
-	    }
-    }
-
-    //外部类
-    public class HelloWorld {
-    
-        private String name = "爱慕课";
-    
-        // 外部类中的show方法
-        public void show() { 
-		    // 定义方法内部类
-		    class MInner {
-			    int score = 83;
-			    public int getScore() {
-				    return score + 10;
-			    }
-		    }
-        
-		    // 创建方法内部类的对象
-            MInner mi = new MInner();
-        
-            // 调用内部类的方法
-		    int newScore = mi.getScore();
-        
-		    ystem.out.println("姓名：" + name + "\n加分后的成绩：" + newScore); //println调用了要打印对象的toString()方法，这个toString()方法继承于Object类
-	    }
-    
-	    // 测试方法内部类
-	    public static void main(String[] args) {
-        
-		    // 创建外部类的对象
-            HelloWorld mo = new HelloWorld();
-        
-            // 调用外部类的方法
-		    mo.show();
-	    }
-    }
-
-    equals()方法比较值类型时比较数值，但是比较引用类型时比较的是内存地址。
-    若要比较引用类型的属性值是否相同，在类里重写equals()方法。
-
-JAVA 多态
-
-    父类的引用可以指向本类对象也可以指向子类对象
-    Animal animal1 = new Animal();
-    Animal animal2 = new Dog();
-    使用instanceof来避免在开辟了Dog类型内存空间的情况下强制转换Cat类型导致的运行错误
-    if(animal instanceof Cat) {
-        Cat cat = (Cat)animal;
-    }
-
-JAVA抽象类
-
-    public abstract class Telphone{
-        public abstract void call();
-        public abstract void text();
-    }
-    通过继承来实现他们，抽象类内可以有方法体
-
-JAVA接口
-
-    public interface IBarkable {          //自动添加abstract
-        public void bark();               //自动添加abstract
-    }
-
-    多继承，接口可继承多个接口
-    接口中可以添加属性值，但属性值强制为常量public static final
-    接口中的方法为抽象类
-    实现接口使用implements，一个类只能继承一个父类但可以实现多个接口
-    继承类写在接口前
-    public class Dog entends Animal implements IBarkable, ILickabe, ISleepable {
-
-    }
-
-    //在main方法里实例化Dog
-    IBarkable ib1 = new Dog();
-
-    //匿名内部类
-    //没有名字的内部类，仅仅在使用的时候定义的内部类
-    //直接new一个接口的实例对象
-    IBarkable ib2 = new IBarkable() {
-        public void bark() {
-            System.out.println("汪汪！");
-        }
-    }
-    ib2.bark();
-    //或者更直接
-    new IBarkable() {
-        public void bark() {
-            System.out.println("汪汪！");
-        }
-    }.bark()
-
-JAVA异常
-
-    try {
-        // 有可能抛出异常的方法
-    } catch (Exception1 e) {
-        // 处理Exception1异常的代码块  ps.若有该异常则执行
-    } catch (Exception2 e) {
-        // 处理Exception2异常的代码块
-    } catch (ExceptionX e){
-        // 处理ExceptionX异常的代码块
-    } finally {
-        // 最终要执行的代码块  ps.一定执行一次
-    }
-
-    // 抛出异常
-
-    若该方法try catch语句无法处理。
-    public void divide(int one,int two) throws Exception { // 如果抛出某异常则在这写上
-        if(two == 0)
-            throw new Exception("除数不能为0！"); // 抛出Exception异常
-        else
-            System.out.println("结果为" + one/two);
-    }
-
-    // 自定义异常
-    public class DrunkException extends Exception { // 继承一个已有异常类或Exception类
-        public DrunkException() {  // 有了有参构造器系统不自动生成无参的自己补一个
-
-        }
-        public DrunkException(String message) {
-            super(message);  // 将异常信息传递给Exception用于打印输出
-        }
-    }
-
-为了让基本数据类型也具备对象的特性， Java 为每个基本数据类型都提供了一个包装类
-
-byte -> Byte
-short -> Short
-int -> Integer
-long -> Long
-float -> Float
-double -> Double
-char -> Character
-boolean -> Boolean
-
-    Int i = 5;
-    Integer m = new Integer("5");
-    m.byteValue()  // 转换为byte型
-    m.doubleValue()  // 转换为double型
-    m.floatValue()  // 转换为float型
-    m.intValue()  // 转换为int型
-    m.longValue()  // 转换为long型
-    m.parseInt(String s)  // 将字符串s转换为int型变量
-    m.toString()  // 转换为字符串类型
-    m.valueOf(String s)  // 将字符串转换为Integer类型
-
-    // 装箱
-    把基本类型转换成包装类，使其具有对象的性质
-    int i = 10;
-    Integer x = new Integer(i);  // 手动装箱
-    Integer y = i;  // 自动装箱
-
-    // 拆箱
-    把包装类对象转换为基本类型的值
-    Integer j = new Integer(8);
-    int m = j.intValue();  // 手动拆箱
-    int n = j;  // 自动拆箱
-
-    // 基本类型与字符串转换
-    int c = 10;  // 将基本类型转换为字符串
-    String str1 = Integer.toString(c);  // 调用基本类型包装类的toString()方法
-    String str2 = String.valueOf(c);    // 调用String类的valueOf()方法
-    String str3 = c + "";
-
-    String str = "8";  // 将字符串转化为数字
-    int d = Integer.parseInt(str);  // 调用包装类的parseXxx方法
-    int e = Integer.valueOf(str);   // 调用包装类的valueOf方法
-
-
-JAVA Date类（逐步弃用）
-
-    Date类默认无参构造方法创建出的对象就代表当前的时间
-    Date d = new Date();
-    System.out.println(d);
-    // 输出 Thu Jan 17 21:07:11 CST 2019
-    //      星期 月 日  时间     中国标准时 年
-
-    // String.format()将日期转换为文本
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  // 使用format()方法转换
-    String today = sdf.format(d);
-    输出 2019-01-17 21:07:11
-    
-    // Date.parse()将文本转化为日期
-    String day = "2019年01月17日 21:07:11";
-    SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-    Date date = df.parse(day);              // 容易出现ParseException需要进行异常处理
-    System.out.println("当前时间:" + date);
-
-JAVA Calendar类
-
-    Calendar类是一个抽象类，通过调用Calendar.getInstance()方法来获取当前时间
-    Calendar c = Calendar.getInstance();  // 创建Calendar对象
-    int year = c.get(Calendar.YEAR);
-    int month = c.get(Calendar.MONTH) + 1;  // 获取月份，0表示1月份
-    int day = c.get(Calendar.DAY_OF_MONTH);  // 获取日期
-    int hour = c.get(Calendar.HOUR_OF_DAY);  // 获取小时
-    int minute = c.get(Calendar.MINUTE);  // 获取分钟
-    int second = c.get(Calendar.SECOND);  // 获取秒
-    System.out.println("当前时间：" + year + "-" + month + "-" + date + " " + hour +":" + minute + ":" + second);
-
-    Date date = c.getTime();  // 将Calendar对象c转换为Date对象date
-    Long time = c.getTimeInMillis();   // 获取毫秒数
-
-
-JAVA Math
-
-    double a = 12.81;
-    int b = (int)a;             // 强制类型转换，去掉小数部分
-    long c = Math.round(a);     // Math.round()方法，四舍五入
-    double d = Math.floor(a);   // Math.floor()方法，返回小于参数的最大整数
-    doubel e = Math.ceil(a);    // Math.ceil()方法，返回大于参数的最小整数
-    double x = Math.random();   // 产生[0,1)的浮点随机数
-    int y = (int)(Math.random() * 99);   // 在[0,99)随机产生整数
-
-
-Java Collection
-
-    定义Collection变量 -> 实例化Collection(用接口的实现类) -> 用实现类内方法实现Collection内元素的控制
-
-    ArrayList  // 有序可重复、控制插入位置删除单个元素、底层由数组实现，是Collection接口的子接口List中的一个实现类
-    // 存入ArrayList的对象只作为Object类存储，读取时得强制类型转换成原类
-    初始化阶段
-    public List courseList;
-    courseList = new ArrayList();   // List为接口不能直接实例化，用实现List接口的类ArrayList来实例化
-
-    Course course1 = new Course("数据结构");
-    Course course2 = new Course("C语言");
-    courseList.add(course1);
-    courseList.add(0, course2);
-
-    Course readCourse = (Course)coursesList.get(0);  // get方法取元素
-
-    System.out.println(readCourse.name);  // 打印输出C语言
-
-    Course[] course = {new Course("离散数学"), new Course("汇编语言")};
-    courseList.addAll(Arrays.asList(course));  // 向List里添加Course数组的实例对象集合
-
-    // 遍历List
-    int size = courseList.size();  // 获取List对象大小
-    
-    Iterator it = courseList.iterator();  // 用迭代器来遍历List
-    while(it.hasNext()) {
-        Course course = (Course)it.next();
+LinkedList
+    .add()
+    .addFirst()
+    .addLast()
+    .clear()
+    .remove(index)
+    .get(index)
+    .getFirst()
+    .set(index, object)
+    .contains(object)
+    .clone()
+    Iterator iter = list.Iterator();
+    while(iter.hasNext())
+    {
         ....
     }
 
-    for(Boject obj:courseList) {
-        Course course = (Course)obj;
-        .....
-    }
+Stack
+    .push(Object)
+    .pop()
+    .empty()判断是否为空
+    .peek()查看栈顶不删除
+    .search()顶端为1递增，没有则-1
 
-    // 修改List - set方法
-    courseList.set(3, new Course("毛概"));
-
-    // 删除List - remove
-    Course uselessCourse = (Course)courseList.get(3);
-    courseList.remove(uselessCourse);                   // List表有这些控制方法而非其中储存地元素
-    courseList.remove(4);
-    courseList.removeAll(arrayList);  // 从一个集合内删除另一个集合的元素
-
-
-    Set 接口及其实现类 - HashSet 无序且不能重复（无论添加多少次最终只会保留一个该对象的引用，可以添加空对象）
-    add() addAll() remove() removeAll() size() 没有set方法
-    set遍历只能用foreach
-    public Set<Course> courseList;
-    courseList = new HashSet();
-
-
-    List与Set的Contains方法 // 检查是否存在
-    Course course = new Course("1", "小学数学");
-    if(courseList.contains(course)) {
-        ...包含小学数学
-    }
-    
-    如果要进一步细分判断则需要重写课程类的equals方法，contains会调用该方法来判断是否相等
-    @Override
-    public boolean equals(Objcet obj) {
-        // 基础判断
-        if(this == obj) {
-            return true;
-        }
-        if(obj == null) {
-            return false;
-        }
-        if(!(obj instanceof Course)) {
-            return false;
-        }
-
-        // 实际可自定义判断
-        Course course = (Course)obj;
-        if(this.name == null) {
-            if(course.name !== null) {
-                retun false;
-            } else {
-                return true;
-            }
-        } else {
-            if(this.name.equals(course.name)) {
-                return ture;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    Set[实现类为hashSet]当中的contains()方法会先判断hashCode()是否相等，然后是equals()所以需要
-
-
-
-Java Map
-
-    Map 提供了一种映射关系，其中的元素是以键值对（key-value [entry类的对象实例]）的形式存储的，能够实现根据key快速查找value
-    key值不可以重复，value不可以，多个key可以对应一个value，支持泛型Map<key值泛型,map值泛型>
-    key和value值可以为任何类型，用put(K key, V value)方法添加，remove(object K)移除
-
-    get(key)返回对应此key的对象
-    keySet()返回此映射中包含键的Set集合
-    values()返回此映射中包含值的Collection集合
-    entrySet()值和键都返回的Set集合
-
-    应用实例：Map<String, Student>进行学生信息管理key为学生id，value为学生对象
-    先判断key值对象处是否为空，再写入
-    String id = sc.next();
-    Student st = studentMap.get(id);
-    if(st == null) {
-        写入....
-    }
-
-    // 遍历
-    Set<String> keySet = studentMap.keySet();  //返回studentMap中的key的Set集合
-    for(String stuID : keySet) {
-        Student st = studentMap.get(stuID);
-        if(st != null) {
-            blablabla
-        }
-    }
-
-    Set<Entry<String, Student>> entrySet = studentMap.entrySet();
-    for(Entry<String, Student> entry : entrySet) {
-        .....entry.getKey()  entry.getValue() 来获取键值和值
-    }
-
-    // 修改
-    put(K key, V value) // key值为已存在的key若无则返回null
-    Student student = new Student(stuID, name);
-    studentMap.put(stuID, student);
-
-
-JAVA Generic泛型
-
-    只能存引用类型，或者基本类型的包装类
-    
-    public List<Course> courseList;  // 带有泛型Course的List
-    this.courseList = new ArrayList<Course>();  // 新建对象实例
-    此时再添加非Course类对象则会报错，不允许添加规定及其子类型以外的对象
-
-    遍历直接用Course类型就行
-    for(Course course:courseList) {
-        ....
-    }
-
-    泛型类型集合可以储存子类对象实例
-    ChildCourse ccr = new ChildCourse();
-    courseList.add(ccr);
+HashSet()
+    .add(object)
+    .clear()
+    .contains()
+    .isEmpth()
+    .remove()
+    .size()
+    .toArray()
+    .containsAll()
+    .clone()
+    .retainAll()求交集
