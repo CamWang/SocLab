@@ -153,7 +153,7 @@ forEach(arr, function(str, index, array) {  //str接受元素的值，index接�
     }
 });      //result = "my forEach example!!!"
 
-//FINDIndex
+//findIndex
 
 //findIndex(arr, callback)
 //function callback(currentElement, currentIndex, array)
@@ -180,3 +180,62 @@ function upperCaseWords(sentence) {
 
 upperCaseWords("lowercase words");
 //结果："Lowercase Words"
+
+// setTimeout
+// clearTimeout
+// setInterval
+
+// setTimeout(callback, delay[in ms]);  -  return a timerId
+// clearTimeout(timerId);
+
+function callback() {
+    console.log("callback function");
+}
+var delay = 1000;
+setTimeout(callback, delay);
+
+setTimeout(function() {
+    console,log("Runs in approx. 2000ms")
+},2000);
+// 取消setTimeout
+var timerId = setTimeout(function() {
+    console.log("runs in 30s");
+},30000);
+
+setTimeout(function() {
+    console.log("Cancel the upper function", timerId);
+    clearTimeoust(timerId);
+},2000)
+
+// setInterval(callback, repeatFrequency) - return a intervalId
+// clearInterval(intervalId)
+function callback() {
+    console.log("callback is called continuously");
+}
+var repeat;
+setTimeout(callback, repeat); // 重复
+
+var num=0;
+var intervalId = setInterval(function() {
+    num++;
+    if(num === 3) {
+        clearInterval(intervalId);
+    }
+}, 1000);
+
+function countDown(a) {
+    var b = a;
+    var intervalId = setInterval(function() {
+        b--;
+        if (b === 0){
+            console.log("Ring Ring Ring!!!");
+            clearInterval(intervalId);
+        } else {
+            console.log("Timer:" + b);
+        }
+    }, 1000);
+}
+
+// Stack执行函数堆[先进后出]，Queue为待执行函数队列[先进先出]，EventLoop负责轮询从Queue内取函数到stack里执行
+// Main函数会先入栈并在所有main函数下函数与Queue中所有函数执行完后执行
+// Stack一共就俩位置，其他按照主函数下扫描到的最外层函数先入stack
