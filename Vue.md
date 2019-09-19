@@ -1,5 +1,42 @@
 # Vue.js
 
+## Vue大坑
+
+### 同一组件间路由变化页面不刷新
+解决方法：使用watch
+```javascript
+ watch: {
+ // 方法1
+  '$route' (to, from) { //监听路由是否变化
+    if(this.$route.params.articleId){// 判断条件1  判断传递值的变化
+      //获取文章数据
+    }
+  }
+  //方法2
+  '$route'(to, from) {
+    if (to.path == "/page") {    /// 判断条件2  监听路由名 监听你从什么路由跳转过来的
+       this.message = this.$route.query.msg     
+    }
+  }
+  
+}
+```
+### 异步回调中使用this无法指向vue实例
+问题描述：事故高发于setTimeout、setInterval、ajax、Promise内的this指针为undifined  
+解决方法：定义变量或使用箭头函数
+```javascript
+ //使用变量访问this实例
+let self=this;   
+    setTimeout(function () {  
+      console.log(self);//使用self变量访问this实例
+    },1000);
+    
+ //箭头函数访问this实例 因为箭头函数本身没有绑定this
+ setTimeout(() => { 
+   console.log(this);
+ }, 500);
+```
+
 ## Vue组件
 
 ### 概述
