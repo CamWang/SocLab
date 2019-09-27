@@ -1,7 +1,7 @@
 # Vue.js
 
 ## Vue大坑
-
+编写博客我认为最重要的就是将自己踩过的坑写下来，防止学习者再次造BUG并且查到昏天黑地也找不出错误。
 ### 同一组件间路由变化页面不刷新
 解决方法：使用watch
 ```javascript
@@ -35,6 +35,36 @@ let self=this;
  setTimeout(() => { 
    console.log(this);
  }, 500);
+```
+
+### setInterval在路由跳转时未及时销毁
+使用beforeDestroy停止setInterval
+```javascript
+//组件销毁前执行的钩子函数，跟其他生命周期钩子函数的用法相同。
+beforeDestroy(){
+     //我通常是把setInterval()定时器赋值给this实例，然后就可以像下面这么停止。
+    clearInterval(this.intervalId);
+},
+```
+
+### Vuex中登录状态在刷新页面后不保存
+使用window.sessionStorage对状态进行保存
+```javascript
+// 初始化状态
+login : window.sessionStorage.getItem('login') || false,
+user : window.sessionStorage.getItem('user') || null
+
+// 登出
+window.sessionStorage.removeItem('login');
+window.sessionStorage.removeItem('user');
+state.login = false;
+state.user = null;
+
+// 登录
+window.sessionStorage.setItem('login', true);
+window.sessionStorage.setItem('user', data);
+state.login = true;
+state.user = data;
 ```
 
 ## Vue组件

@@ -1,0 +1,320 @@
+1.C++对C增强的两点
+    在原来面向过程的机制基础上，对C语言的功能进行了扩充
+    增加了面向对象机制
+
+2.面向对象的四个基本特征
+    抽象、封装、继承、多态
+
+3.友元的概念及其作用
+    // 可访问类内私有成员的普通函数或成员函数
+    // B声明为类A的友元类则可访问A内所有成员
+    // 在类A内添加friend B;即可声明B为A的友元类。 
+    // 例1
+    class Time
+    {
+        public:
+            Time(int, int, int);
+            friend void display(Time &t);
+        private:
+            int hour;
+            int minute;
+            int sec;
+    };
+
+    Time::Time(int h, int m, int s)
+    {
+        hour = h;
+        minute = m;
+        sec = s;
+    }
+
+    void display(Time &t)
+    {
+        cout << t.hour << t.minute << t.sec << endl;
+    }
+
+    int main()
+    {
+        Time time;
+        cout << 
+    }
+
+    //例2
+    class Time
+    {
+        public:
+            void display(Date &);
+    }
+
+    class Date
+    {
+        public:
+            friend void Time::display(Date &);
+    }
+
+4.构造函数的作用
+    类对象的初始化
+
+5.析构函数的作用
+    进行清理工作，释放占用的内存
+
+6.什么是动态多态并举一个例子
+
+
+7.参数初始化表
+    // 使用参数初始化表替代赋值语句
+    类名::构造函数名(参数)成员初始化{ 构造函数体 }
+    Box::Box(int h, int w, int l) : height(h),width(w),length(l) { }
+
+8.什么是多重继承并举例说明，多重继承为什么会引发二义性？
+    (1)一个派生类有多个基类，比如初中生和高中生都继承于中学生类
+    (2)一个类的多个父类中有同名函数，一个类的多个父类也有同一父类。
+
+9.私有成员和受保护成员的区别
+    私有仅类函数与友元使用，受保护成员可被子类使用
+
+10.类和对象的关系
+    对象是类的具体实现，类是对象的抽象表达
+
+11.什么是多态性并举例说明
+    对同一个消息，不同对象有不同响应方式
+
+12.静态数据成员的作用
+    在同类多个对象之间实现数据共享
+    class Box
+    {
+        public :
+            int volume();
+            private :
+            static int height;
+            int width; int length;
+        // 不能使用初始化表初始化static静态数据成员
+    };
+    // 只能在类外初始
+    int Box::height = 10;
+13.举例说明虚基类的作用
+    在继承简介共同基类时只保留一份成员。
+
+15.举例子说明多重继承与多层继承的区别
+    多重继承即有多个父类，例如一位老师，既作为老师身份又作为系主任身份，继承了老师与系主任类。
+    多层继承即多层子父类继承关系，例如狮子是猫科动物的子类，而猫科动物又是动物的子类，传递关系。
+16.析构函数可以为virtual 型，构造函数则不能，为什么？ 
+    虚函数调用使用vtable虚函数表，该vtable在构造函数调用时创建
+
+17.类的成员函数在什么情况下应该定义为私有的?这样做的目的是什么?
+    类中其他成员的工具函数时，防止用户调用这些私有的工具函数。
+18.请比较函数重载和虚函数在概念和使用方式方面有什么区别？
+    函数重载是同名函数在接受不同消息时的不同表现，而虚函数
+    
+19.相对于面向过程,面向对象程序设计的优点
+20.继承在软件开发过程中的意义
+21.什么是面向对象的程序设计,其主要特征是什么?
+22.一个函数不能既作为重载函数又作为有默认参数的函数。
+    float volume(float b, float r=12.5)
+    { }
+    float volume(float a)
+
+22.内置函数
+    如果需要频繁使用，使用inline关键词将把函数代码嵌入主调函数中
+
+23.多重继承的构造函数
+
+    class Teacher
+    {
+        public:
+            Teacher(string n, int a)
+            {
+                name = n;
+                age = a;
+            }
+        protected:
+            string name;
+            int age;
+    }
+
+    class Student
+    {
+        public:
+            Student(char n[], float s)
+            {
+                strcpy(name, n)
+                scrore = s;
+            }
+        protected:
+            string name; // 可以使用同一变量名，但使用时指明Teacher::name/Stduent::name
+            float score;
+    }
+
+    class Graduate:public Teacher, public Student
+    {
+        public:
+            Graduate(string n, int a, string n1, float s, float w):Teacher(n, a),Student(n, s),wage(w){}
+            // 或
+            Graduate(string n, int a, string n1, float s, float w):Teacher(n, a),Student(n, s))
+            {
+                wage = w;
+            }
+        private:
+            float wage;
+    }
+
+24.类模板
+    template<class T>
+    class Compare
+    {
+        public:
+            Compare(T a, T b)
+            {
+                x = a;
+                y = b;
+            }
+
+            T max()
+            {
+                return (x>y)?x:y;
+            }
+
+            T min()
+            {
+                return (x>y)?y:x;
+            }
+        private:
+            T a,b;
+    }
+
+// 三角形面积
+#include <iostream>
+using namespace std;
+
+class Area
+{
+private:
+	float a,b,c;  // 三角形三边
+public:
+	Area(float d, float e, float f)  // 构造函数传入三条边并判断是否符合三角形三边准则并赋值
+	{
+		if (((d + e) < f) || ((e + f) < d) || ((d + f) < e))
+		{
+			cout<<"输入数值有错误"<<endl;
+			a = 0;
+			b = 0;
+			c = 0;
+		}
+		else 
+		{
+			a = d;
+			b = e;
+			c = f;
+		}
+	}
+	float getArea()  // 计算并返回float类型三角形面积的函数
+	{
+		float p = (a + b + c) / 2;
+		return sqrt(p * (p - a) * (p - b) * (p - c));
+	}
+};
+
+int main()
+{
+	int a, b, c;
+    cout << "请输入三角形三条边"<<endl;
+	cin >> a >> b >> c;
+	cout<<"三角形的面积是"<< Area(a, b, c).getArea()<<endl;  // 创建Area对象并直接调用getArea()方法
+}
+
+// 长方形面积
+#include <iostream>
+using namespace std;
+
+class Square
+{
+private:
+	float length;
+	float width;
+public:
+	Square(float l, float w)
+	{
+		if ((l > 0) && (w > 0))
+		{
+			length = l;
+			width = l;
+		}
+	}
+
+	float getArea()
+	{
+		return length * width;
+	}
+};
+
+int main()
+{
+	float l, w;
+	cout << "请输入长和宽" << endl;
+	cin >> l >> w;
+	cout <<"面积为"<< Square(l, w).getArea() << endl;
+}
+
+// 学生平均成绩
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Student
+{
+protected:
+	string name;
+	long id;
+	float score;
+public:
+	Student(){}
+	Student(string n, long i, float s)
+	{
+		name = n;
+		id = i;
+		score = s;
+	}
+	float getScore()
+	{
+		return score;
+	}
+	void toString()
+	{
+		cout << "学号：" << id << " 姓名：" << name << "分数：" << score << endl;
+	}
+};
+
+int main()
+{
+	Student stu[5];
+	for (int i = 0; i < 5; i++)
+	{
+		string name;
+		long id;
+		float score;
+		cout << "输入姓名、学号、成绩" << endl;
+		cin >> name >> id >> score;
+		Student student = Student(name, id, score);
+		stu[i] = student;
+	}
+
+	int sum = 0;
+
+	for (int i = 0; i < 5; i++)
+	{
+		stu[i].toString();
+		sum += stu[i].getScore();
+	}
+
+	cout << "平均成绩为" << sum / 5.0 << endl;
+}
+
+25.C++程序的编写和实现
+    1.用C++语言编写程序
+    2.对源程序进行编译
+    3.将目标进行连接（将编译后的.obj目标程序与库文件和其他目标程序连接成可执行目标程序）
+    4.运行程序（运行二进制可执行.exe程序）
+    5.分析结果
+
+26.结构体和类的区别
+    结构体默认为public公用的，类的属性默认为private私有的

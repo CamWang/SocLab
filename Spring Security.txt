@@ -1,0 +1,101 @@
+// Restful API
+    // URL代表资源
+
+
+// 验证注解 javax.validator
+    // 字符串、集合
+    @NotNull                必须不为空
+    @Null                   必须为空
+    @Pattern(regex=)        匹配regex正则式
+    @Size(min=,max=)        集合元素数量必须在min、max之间
+    @CreditCardNumber(..)   必须是信用卡号
+    @Email                  必须是邮箱地址
+    @Length(min=,max=)      检查字符串长度
+    @NotBlank               字符串必须有字符
+    @NotEmpty               字符串不为null，集合有元素
+    @Range(min=,max=)       数字必须大于等于min小于等于max
+    @SafeHtml               字符串是安全的html
+    @URL                    字符串是合法的URL
+    // 布尔值
+    @AssertFalse            必须为false
+    @AssertTrue             必须为true
+    // 数字值
+    @Max(value=)            值必须小于等于value的值
+    @Min(value=)            值必须大于等于value的值
+    @DecimalMax(value=,inclusive=)  必须小于或小于等于value的值，inclusive标记是否可以相等
+    @DecimalMin(value=,inclusive=)  必须大于或大于等于value的值，inclusive标记是否可以相等
+    @Digits(integer=,fraction=)     数字格式检查，integer是整数部分长度，fraction是小数部分长度
+    // 日期值
+    @Future                 必须是未来的日期
+    @Past                   必须是过去的日期
+
+// 创建自定义验证注解
+    源码Validator包
+// 自定义异常以及异常集中自定义处理
+    源码exception包与ControllerExceptionHandler类
+
+// RESTful API拦截
+    // 说白了就是在指定方法前后执行一些既定的代码
+    // 需求：记录所有服务的处理时间
+    // 优先级 Filter -> Interceptor -> ControllerAdvice -> Aspect Controller发生错误捕获顺序相反
+    // 过滤器（Filter）
+        // 在服务器端截取用户端的请求与响应信息并对其进行过滤，用户与Web资源的中间件，双向的，不能直接返回数据
+        // j2ee定义，与spring无瓜
+        // 四种：REQUEST直接访问时默认的，FORWARD，INCLUDE，ERROR
+        // 实例化 -> init() -> n次doFilter() -> destory 
+        // FilterChain参数可以调用filterChain.doFilter方法将请求传给下一个过滤器或转发重定向到其他资源（Filter放行）
+        // 如果对于一个URL有多个过滤器则按web.xml配置顺序组装成过滤器链
+    
+    // 拦截器（Interceptor）
+        // spring定义的，相比Filter多了可以获取处理该请求的Controller的参数与处理Controller异常的能力
+
+    // 切片（Aspect）
+        // Spring AOP，将业务周边功能（性能统计、日志、事务管理等）以面向切面方式编制在一起
+        // 包括用注解声明的切入点（在那些方法上起作用，什么时候起作用）与增强（即实现业务逻辑的方法）
+        // 这三者相似，不过比前两者的好处是能拿到传入切点方法的参数，但不能获取原始http请求
+
+// 文件上传和下载
+    // 上传加MultipartFile类型参数
+
+// 多线程
+    // 1. Runnable在Controller里另开一个Callable
+    // 2. 使用消息队列，发消息一个线程，处理消息一个线程，轮询收消息一个线程，中间一个例如对象队列存着内容
+
+// 前后端并行开发工作
+    // 使用swagger自动生成html文档，使用WireMock快速伪造RESTful服务
+    // 在方法上注上@ApiOperation(value="信息")或在属性上注上@ApiModelProperty(value = "用户名称")来添加自定义信息，参数添加@ApiParam(value="")注解
+
+// Spring Security 配置
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+    import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+    @Configuration
+    public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            // 使用表单登录，.authorizeRequests()表示接下来的都是认证配置，对所有请求都要认证
+            http.formLogin()
+                    // .httpBasic() 浏览器弹窗认证
+                    .and()
+                    .authorizeRequests()
+                    .anyRequest()
+                    .authenticated();
+        }
+    }
+
+    // 原理：过滤器链：请求与相应都要过，在用户与RESTful API之间
+        // 若带有配置好的登录请求类型的登录请求则验证，登录请求向此过滤器发起，默认POST /login，在Config里加loginProcessingUrl("")配置项自定义URL
+        1. Username Password Authentication Filter  
+        2. Basic HTTP Authentication Filter // 同上
+        3. 。。。其他验证登录的filter
+        4. Exception Translation Filter 处理抛出的异常（认证不通过的原因）
+        5.Filter Security Interceptor 检查身份验证与配置条件是否满足，不满足会弹回配置好的登录方式内
+        // 直接请求restful api因为没带验证信息则直接到5，验证是否合配置规则，
+        // 若不符合则被弹回到配置规则的filter上，再次被5验证若可以则执行doFilter调用Controller
+
+    // 用户详细信息获取（使用用户名拿到密码交给Spring Security）
+
+    // 用户身份校验逻辑（Spring Security做校验并拿到是否冻结等其他）UserDetails接口定义着SS需要的信息
+
+    // 处理密码加密解密
