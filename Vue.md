@@ -71,7 +71,65 @@ state.user = data;
 
 ### 概述
 Vue组件 = Vue实例 = new Vue(options)  
-组件由template标签内的html，script标签内的js，style[scoped]标签内的css组成
+组件由template标签内的html，script标签内的js，style[scoped]标签内的css组成  
+如果一个组件仅接收一些prop，而不监听状态或生命方法，可以把该组件声明为函数式组件，即无状态组件。
+
+### 触发响应式数据
+
+#### 条件
+
+* 在data(){return{}}中声明的变量
+* 在computed中声明的变量
+* 在实例被创建时就已经被声明的属性，新增属性非响应式
+* 模板当中用到的属性
+* 声明变量仅绑定声明的那一层
+```javascript
+data() {
+  return {
+    person: Object,
+  }
+}
+// 此时若为person.name赋值则不触发响应式更新
+```
+
+#### 原理
+
+Vue为响应式数据添加了一个代理层，如果渲染层用到则添加入Watcher，只有在Watcher内的元素才能被监听并响应式更新。
+
+### 组件生命周期
+
+#### 创建阶段
+
+初始化事件和生命周期 -> beforeCreate -> 数据监测、属性、侦听器配置等 -> created -> 模板编译到render -> beforeMount -> render -> mounted -> 异步请求、操作DOM、定时器等
+
+#### 更新阶段
+
+依赖数据改变或使用$forceUpdate强制刷新 -> beforeUpdate -> 移除已经添加的事件监听器 -> render -> updated 操作DOM添加事件监听器
+
+### 函数式组件
+
+例如锚点标题组件等无状态、不监听状态、无生命周期方法的简单组件
+
+#### 语法
+
+```javascript
+Vue.component('my-component', {
+  functional: true,
+  // Props 是可选的
+  props: {
+    // ...
+  },
+  // 为了弥补缺少的实例提供第二个参数作为上下文
+  render: function (createElement, context) {   // 函数时组件从context或简写为ctx取参
+    // context参数包括以下字段
+    // props
+    // children VNode子节点的数组
+    // slots 插槽对象
+    // scopedSlots 作用域插槽对象
+    // data 
+  }
+})
+```
 
 ### 模板语法
 
@@ -109,6 +167,27 @@ Vue组件 = Vue实例 = new Vue(options)
 <a :href="url">...</a>
 // v-on:可以缩写为"@"
 <a @click="doSomething">...</a>
+```
+Vue提供14种指令
+```html
+<!-- 下例显示的还是hello vue -->
+<div v-text="hello vue">hello</div>
+<!-- 插入Html -->
+<div v-html="<h1>blabla</h1>"></div>
+<!-- 决定显不显示 -->
+<div v-show = "boolean">true</div>
+<!-- 决定渲不渲染 -->
+<div v-if="number === 6">Number是6</div>
+<div v-else-if="number === 3">Number是3</div>
+<div v-else>Number啥都不是</div>
+<!-- 循环 -->
+<div v-for="num in [1,2,3]" v-bind:key="num"></div>
+<!-- 事件 -->
+<div v-on:click="func"></div>
+<div @click="func"></div>
+<!-- 双向绑定 -->
+<div v-model="inputText"></div>
+<!--  -->
 ```
 
 #### 计算属性和侦听器 computed/watch
@@ -159,7 +238,18 @@ var vm = new Vue({
   data: {
     firstName: 'Foo',
     lastName: 'Bar',
-    fullName: 'Foo Bar'
+    fullName: 'Foo Bar',
+    a: '',
+    b: {
+      c: '',
+    },
+    e: {
+      f: {
+        g: {
+          // ...
+        }
+      }
+    }
   },
   // 使用watch侦听属性可以观察响应Vue实例上的数据变动但明显效果不如使用computed属性
   watch: {
@@ -168,6 +258,18 @@ var vm = new Vue({
     },
     lastName: function (val) {
       this.fullName = this.firstName + ' ' + val
+    },
+    a: function (val, oldVal) {
+      // ....
+    },
+    "b.c": function (val, oldVal) {   // 在监听的属性名为子元素时加""
+      // ....
+    },
+    e: {
+      handler: function(val, oldVal) {
+        // ...
+      },
+      deep: true  // 深度监听，同时监听e的所有子元素
     }
   }
 })
@@ -825,6 +927,74 @@ Vue.component('base-input', {
     </label>
   `
 })
+```
+Vue使用createElement('div', {数据对象}，Array<子虚拟节点>)来创建VNode  
+其中子虚拟节点也使用createElement()函数来创建VNode
+数据对象让你可以使用js对象绑定HTML属性特性
+```javascript
+{
+  // 与 `v-bind:class` 的 API 相同，
+  // 接受一个字符串、对象或字符串和对象组成的数组
+  'class': {
+    foo: true,
+    bar: false
+  },
+  // 与 `v-bind:style` 的 API 相同，
+  // 接受一个字符串、对象，或对象组成的数组
+  style: {
+    color: 'red',
+    fontSize: '14px'
+  },
+  // 普通的 HTML 特性
+  attrs: {
+    id: 'foo'
+  },
+  // 组件 prop
+  props: {
+    myProp: 'bar'
+  },
+  // DOM 属性
+  domProps: {
+    innerHTML: 'baz'
+  },
+  // 事件监听器在 `on` 属性内，
+  // 但不再支持如 `v-on:keyup.enter` 这样的修饰器。
+  // 需要在处理函数中手动检查 keyCode。
+  on: {
+    click: this.clickHandler
+  },
+  // 仅用于组件，用于监听原生事件，而不是组件内部使用
+  // `vm.$emit` 触发的事件。
+  nativeOn: {
+    click: this.nativeClickHandler
+  },
+  // 自定义指令。注意，你无法对 `binding` 中的 `oldValue`
+  // 赋值，因为 Vue 已经自动为你进行了同步。
+  directives: [
+    {
+      name: 'my-custom-directive',
+      value: '2',
+      expression: '1 + 1',
+      arg: 'foo',
+      modifiers: {
+        bar: true
+      }
+    }
+  ],
+  // 作用域插槽的格式为
+  // { name: props => VNode | Array<VNode> }
+  scopedSlots: {
+    default: props => createElement('span', props.text)
+  },
+  // 如果组件是其它组件的子组件，需为插槽指定名称
+  slot: 'name-of-slot',
+  // 其它特殊顶层属性
+  key: 'myKey',
+  ref: 'myRef',
+  // 如果你在渲染函数中给多个元素都应用了相同的 ref 名，
+  // 那么 `$refs.myRef` 会变成一个数组。
+  refInFor: true
+}
 ```
 #### 事件
 
@@ -2319,6 +2489,8 @@ const router = new VueRouter({
   }
 })
 ```
+
+
 
 ### Vuex
 Vuex是用来在组件间共享数据的，Vuex的状态数据是响应式的，使用单一状态树，每个应用仅包含一个store实例来实现数据共享。
